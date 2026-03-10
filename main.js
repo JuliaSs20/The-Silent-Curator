@@ -57,7 +57,8 @@ function init() {
     scene.fog = new THREE.Fog(0x050507, 2, 10);
 
     camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 0, 5);
+    camera.position.set(0, 0.5, 5); // Angle down slightly
+    camera.lookAt(0, -0.5, 0);
 
     renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -79,7 +80,21 @@ function init() {
     artifactGroup = new THREE.Group();
     scene.add(artifactGroup);
 
-    loadLevel(0);
+    // Bancada (Workbench)
+    const benchTexture = new THREE.TextureLoader().load('/assets/bancada.jpg');
+    const benchMaterial = new THREE.MeshStandardMaterial({
+        map: benchTexture,
+        roughness: 0.9,
+        metalness: 0.2,
+        color: 0x555555
+    });
+    const benchGeometry = new THREE.BoxGeometry(20, 1, 10);
+    const benchMesh = new THREE.Mesh(benchGeometry, benchMaterial);
+    benchMesh.position.set(0, -2, 0);
+    benchMesh.receiveShadow = true;
+    scene.add(benchMesh);
+    
+    // Level loading is deferred until player clicks Iniciar Turno
     animate();
     setupEvents();
 }
@@ -184,6 +199,22 @@ function setupEvents() {
     document.getElementById('btn-uv').addEventListener('click', toggleUV);
     document.getElementById('btn-scale').addEventListener('click', toggleScale);
     document.getElementById('btn-finalizar').addEventListener('click', finishLevel);
+
+    // Initial Screen
+    document.getElementById('btn-start').addEventListener('click', () => {
+        document.getElementById('start-screen').classList.remove('active');
+        document.getElementById('ui-overlay').classList.remove('hidden-ui');
+        loadLevel(0);
+    });
+
+    // Manual Modal
+    const manualModal = document.getElementById('manual-modal');
+    document.getElementById('btn-manual').addEventListener('click', () => {
+        manualModal.classList.add('active');
+    });
+    document.getElementById('btn-close-manual').addEventListener('click', () => {
+        manualModal.classList.remove('active');
+    });
 }
 
 function toggleScale() {
@@ -224,9 +255,10 @@ function toggleLoupe() {
     loupeActive = !loupeActive;
     document.getElementById('btn-loupe').classList.toggle('active', loupeActive);
     
-    const targetZ = loupeActive ? 2.5 : 5;
+    const targetZ = loupeActive ? 3.0 : 5;
+    const targetY = loupeActive ? 0 : 0.5;
     new TWEEN.Tween(camera.position)
-        .to({ z: targetZ }, 500)
+        .to({ z: targetZ, y: targetY }, 500)
         .easing(TWEEN.Easing.Cubic.Out)
         .start();
 }

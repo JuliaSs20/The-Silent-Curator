@@ -5,15 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Silent Curator | Antigravity Engine</title>
+    <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
     <div id="app">
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen-overlay active">
+            <div class="start-content">
+                <h1>The Silent Curator</h1>
+                <p>Analise. Identifique. Sobreviva.</p>
+                <button id="btn-start" class="primary-btn">Iniciar Turno</button>
+            </div>
+        </div>
+
         <div id="game-canvas">
             <!-- Three.js renders here -->
         </div>
 
-        <div id="ui-overlay">
+        <div id="ui-overlay" class="hidden-ui">
             <aside id="panel-tools" class="glass-panel">
                 <div class="panel-header">Instrumentos</div>
                 <div class="tool-buttons">
@@ -33,6 +43,12 @@
                         <span class="icon">⚖️</span>
                         <div class="label-group">
                             <span class="label">Balança</span>
+                        </div>
+                    </button>
+                    <button id="btn-manual" class="tool-btn" title="Manual de Jogatina">
+                        <span class="icon">📖</span>
+                        <div class="label-group">
+                            <span class="label">Manual</span>
                         </div>
                     </button>
                 </div>
@@ -60,7 +76,15 @@
             </aside>
         </div>
 
-        <div id="feedback-modal" class="hidden">
+        <!-- Manual Modal -->
+        <div id="manual-modal" class="hidden screen-overlay">
+            <div class="manual-content">
+                <button id="btn-close-manual" class="close-btn">&times;</button>
+                <img src="/assets/manual.png" alt="Manual de Jogatina" class="manual-image">
+            </div>
+        </div>
+
+        <div id="feedback-modal" class="hidden screen-overlay">
             <div class="modal-content">
                 <h1 id="feedback-title">RELATÓRIO</h1>
                 <p id="feedback-score"></p>
