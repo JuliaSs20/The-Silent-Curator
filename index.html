@@ -5,196 +5,1077 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Silent Curator</title>
-    <link rel="stylesheet" href="./style.css">
     <link
-        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600;700&family=Inter:wght@300;400;500&display=swap"
         rel="stylesheet">
+    <style>
+        :root {
+            --bg: #08080c;
+            --panel: rgba(12, 12, 18, 0.95);
+            --gold: #c4a060;
+            --gold-l: #e0c890;
+            --gold-d: rgba(196, 160, 96, 0.15);
+            --red: #c0392b;
+            --green: #27ae60;
+            --txt: #e0e0e8;
+            --dim: #777;
+            --border: rgba(255, 255, 255, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--txt);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* === SCREENS === */
+        .screen {
+            position: fixed;
+            inset: 0;
+            display: none;
+            z-index: 10;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* === START SCREEN (IGUAL PRIMEIRA VERSÃO) === */
+        #screen-start {
+            background: radial-gradient(ellipse at center, #151520 0%, #050508 80%);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .start-wrap {
+            text-align: center;
+            z-index: 2;
+            position: relative;
+            max-width: 700px;
+            padding: 5rem;
+            border: 1px solid rgba(196, 160, 96, 0.2);
+            background: rgba(10, 10, 15, 0.85);
+        }
+
+        .start-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            animation: bob 3s ease-in-out infinite;
+        }
+
+        @keyframes bob {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-12px)
+            }
+        }
+
+        .start-title {
+            font-family: 'Crimson Pro', serif;
+            font-size: 4.5rem;
+            color: var(--gold);
+            letter-spacing: 10px;
+            line-height: 1.15;
+            text-shadow: 0 0 40px rgba(196, 160, 96, 0.25);
+            margin-bottom: 1rem;
+        }
+
+        .start-sub {
+            font-size: 1rem;
+            color: var(--dim);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+        }
+
+        .start-desc {
+            color: #999;
+            line-height: 1.7;
+            margin-bottom: 3rem;
+            font-style: italic;
+        }
+
+        .start-tags {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .start-tags span {
+            background: var(--gold-d);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--gold-l);
+            border: 1px solid rgba(196, 160, 96, 0.2);
+        }
+
+        /* Particles */
+        .particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            bottom: -10px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: rise linear infinite;
+        }
+
+        @keyframes rise {
+            0% {
+                transform: translateY(0) scale(0);
+                opacity: 0
+            }
+
+            20% {
+                opacity: 0.5
+            }
+
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0
+            }
+        }
+
+        /* === BUTTONS === */
+        .btn-gold {
+            background: var(--gold);
+            border: none;
+            color: #000;
+            padding: 1.2rem 3.5rem;
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.4s ease;
+        }
+
+        .btn-gold:hover {
+            background: var(--gold-l);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(196, 160, 96, 0.3);
+        }
+
+        .btn-sm {
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+        }
+
+        .btn-close {
+            background: transparent;
+            border: 1px solid var(--dim);
+            color: var(--dim);
+            padding: 0.7rem 1.5rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .btn-close:hover {
+            border-color: var(--txt);
+            color: var(--txt);
+        }
+
+        /* === AUCTION === */
+        #screen-auction {
+            background: radial-gradient(ellipse at top, #1a1520, #080810);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auction-wrap {
+            max-width: 900px;
+            width: 95%;
+            z-index: 2;
+        }
+
+        .auction-head {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auction-badge {
+            display: inline-block;
+            background: var(--gold-d);
+            color: var(--gold);
+            padding: 0.4rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(196, 160, 96, 0.3);
+        }
+
+        .auction-house {
+            font-family: 'Crimson Pro', serif;
+            color: var(--gold);
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+        }
+
+        .auction-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            padding: 3rem;
+            border-radius: 4px;
+        }
+
+        .auction-frame {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 4px;
+            min-height: 300px;
+        }
+
+        .auction-frame img {
+            max-width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+        }
+
+        .auction-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .auction-info h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.6rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .auc-origin {
+            color: var(--dim);
+            font-size: 0.8rem;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .auc-desc {
+            color: #aaa;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .auc-price-label {
+            color: var(--dim);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .auc-price {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 2rem;
+        }
+
+        /* === HUD === */
+        .hud {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 0.6rem 2rem;
+            background: rgba(5, 5, 10, 0.92);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+
+        .hud-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hud-lbl {
+            font-size: 0.55rem;
+            color: var(--dim);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hud-val {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.2rem;
+            color: var(--gold);
+        }
+
+        .hud-right {
+            margin-left: auto;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .hud-btn {
+            background: var(--gold-d);
+            border: 1px solid rgba(196, 160, 96, 0.3);
+            color: var(--gold);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .hud-btn:hover {
+            background: var(--gold);
+            color: #000;
+            transform: scale(1.1);
+        }
+
+        /* === INSPECTION LAYOUT === */
+        #screen-inspection {
+            background: var(--bg);
+            flex-direction: column;
+        }
+
+        .insp-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr 280px;
+            height: calc(100vh - 48px);
+            margin-top: 48px;
+        }
+
+        .side-panel {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .side-panel.left {
+            border-right: 1px solid rgba(196, 160, 96, 0.1);
+        }
+
+        .side-panel.right {
+            border-left: 1px solid rgba(196, 160, 96, 0.1);
+        }
+
+        .ptitle {
+            font-family: 'Crimson Pro', serif;
+            font-size: 0.8rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--gold-d);
+            margin-bottom: 1.2rem;
+        }
+
+        /* Tools */
+        .tools-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tbtn {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            color: var(--txt);
+            padding: 0.9rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+        }
+
+        .tbtn:hover {
+            background: var(--gold-d);
+            border-color: rgba(196, 160, 96, 0.4);
+        }
+
+        .tbtn.active {
+            background: var(--gold);
+            color: #000;
+            box-shadow: 0 0 20px rgba(196, 160, 96, 0.3);
+        }
+
+        .tbtn .ti {
+            font-size: 1.3rem;
+        }
+
+        .tbtn .tn {
+            flex: 1;
+        }
+
+        .tbtn .tl {
+            font-size: 0.6rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        /* Manual */
+        .manual-sec {
+            margin-top: auto;
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+        }
+
+        .manual-txt {
+            font-family: 'Crimson Pro', serif;
+            font-size: 0.85rem;
+            color: #bbb;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* Object viewer */
+        .insp-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, #12121a, #08080c);
+            position: relative;
+            padding: 1.5rem;
+        }
+
+        .obj-viewer {
+            position: relative;
+            width: 100%;
+            max-width: 550px;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .obj-viewer img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+            user-select: none;
+            pointer-events: none;
+            transition: filter 0.5s;
+        }
+
+        .obj-viewer.uv-on {
+            background: #0a0020;
+        }
+
+        .obj-viewer.uv-on img {
+            filter: hue-rotate(240deg) saturate(2) brightness(0.6);
+        }
+
+        /* Corners */
+        .vf {
+            position: absolute;
+            inset: 15px;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .vc {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border: 2px solid var(--gold);
+            opacity: 0.35;
+        }
+
+        .vc.tl {
+            top: 0;
+            left: 0;
+            border-right: 0;
+            border-bottom: 0;
+        }
+
+        .vc.tr {
+            top: 0;
+            right: 0;
+            border-left: 0;
+            border-bottom: 0;
+        }
+
+        .vc.bl {
+            bottom: 0;
+            left: 0;
+            border-right: 0;
+            border-top: 0;
+        }
+
+        .vc.br {
+            bottom: 0;
+            right: 0;
+            border-left: 0;
+            border-top: 0;
+        }
+
+        .obj-name {
+            margin-top: 1rem;
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.1rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Loupe */
+        .loupe {
+            position: absolute;
+            z-index: 20;
+            border-radius: 50%;
+            border: 3px solid var(--gold);
+            box-shadow: 0 0 20px rgba(196, 160, 96, 0.4), inset 0 0 15px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+            background-repeat: no-repeat;
+            display: none;
+        }
+
+        /* UV overlay */
+        .uv-ov {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, rgba(88, 0, 255, 0.15), rgba(10, 0, 30, 0.6));
+            pointer-events: none;
+            z-index: 10;
+            animation: uvp 2s ease-in-out infinite;
+            display: none;
+        }
+
+        @keyframes uvp {
+
+            0%,
+            100% {
+                opacity: 0.7
+            }
+
+            50% {
+                opacity: 1
+            }
+        }
+
+        /* Anomaly markers */
+        .markers {
+            position: absolute;
+            inset: 0;
+            z-index: 15;
+            pointer-events: none;
+        }
+
+        .amarker {
+            position: absolute;
+            border: 2px solid var(--red);
+            border-radius: 4px;
+            background: rgba(192, 57, 43, 0.15);
+            animation: mpulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes mpulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 5px var(--red)
+            }
+
+            50% {
+                box-shadow: 0 0 20px var(--red)
+            }
+        }
+
+        .mlabel {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--red);
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.6rem;
+            white-space: nowrap;
+            font-weight: 600;
+        }
+
+        /* Verdict */
+        .verd-q {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1rem;
+            color: #888;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .verd-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .vbtn {
+            width: 100%;
+            padding: 1.3rem;
+            border: none;
+            border-radius: 4px;
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.4s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+
+        .vbtn-ok {
+            background: transparent;
+            border: 2px solid var(--green);
+            color: var(--green);
+        }
+
+        .vbtn-ok:hover {
+            background: var(--green);
+            color: #fff;
+            box-shadow: 0 0 25px rgba(39, 174, 96, 0.4);
+        }
+
+        .vbtn-bad {
+            background: transparent;
+            border: 2px solid var(--red);
+            color: var(--red);
+        }
+
+        .vbtn-bad:hover {
+            background: var(--red);
+            color: #fff;
+            box-shadow: 0 0 25px rgba(192, 57, 43, 0.4);
+        }
+
+        .tool-res {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .tres-ok {
+            background: rgba(39, 174, 96, 0.1);
+            border: 1px solid rgba(39, 174, 96, 0.3);
+            display: block;
+        }
+
+        .tres-warn {
+            background: rgba(192, 57, 43, 0.1);
+            border: 1px solid rgba(192, 57, 43, 0.3);
+            display: block;
+        }
+
+        /* === MODALS === */
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-bg {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(8px);
+        }
+
+        .mbox {
+            position: relative;
+            z-index: 2;
+            background: #0c0c14;
+            border: 1px solid var(--gold-d);
+            padding: 3.5rem;
+            max-width: 600px;
+            width: 95%;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .mbox.fail {
+            border-color: var(--red);
+        }
+
+        .mbox.fail h2 {
+            color: var(--red);
+        }
+
+        .micon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .mbox h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2.2rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .mbox p {
+            color: #aaa;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .rewards {
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .rew {
+            padding: 0.5rem 0.8rem;
+            margin-bottom: 0.4rem;
+            background: var(--gold-d);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: var(--gold);
+        }
+
+        .rew.bad {
+            background: rgba(192, 57, 43, 0.15);
+            color: var(--red);
+        }
+
+        /* Shop */
+        .mbox.wide {
+            max-width: 750px;
+        }
+
+        .shop-sub {
+            color: var(--dim);
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sgrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .scard {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .scard.can {
+            cursor: pointer;
+        }
+
+        .scard.can:hover {
+            border-color: var(--gold);
+            background: var(--gold-d);
+        }
+
+        .scard.own {
+            opacity: 0.4;
+        }
+
+        .scard.exp {
+            opacity: 0.4;
+        }
+
+        .scard .si {
+            font-size: 1.8rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .scard h4 {
+            font-family: 'Crimson Pro', serif;
+            color: var(--gold);
+            margin-bottom: 0.2rem;
+            font-size: 0.9rem;
+        }
+
+        .scard p {
+            font-size: 0.7rem;
+            color: var(--dim);
+            margin-bottom: 0.5rem;
+        }
+
+        .scard .sp {
+            font-size: 0.75rem;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* Backpack */
+        .bgrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .bcard {
+            background: var(--gold-d);
+            border: 1px solid rgba(196, 160, 96, 0.2);
+            padding: 0.8rem;
+            border-radius: 4px;
+        }
+
+        .bcard img {
+            width: 100%;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 0.4rem;
+        }
+
+        .bcard h4 {
+            font-family: 'Crimson Pro', serif;
+            color: var(--gold);
+            font-size: 0.8rem;
+        }
+
+        .bcard p {
+            font-size: 0.6rem;
+            color: var(--dim);
+        }
+
+        .empty-bp {
+            grid-column: 1/-1;
+            text-align: center;
+            color: var(--dim);
+            padding: 2rem;
+            font-style: italic;
+        }
+
+        /* Game Over */
+        .fstats {
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .frow {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0.8rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .frow span:last-child {
+            color: var(--gold);
+            font-weight: 600;
+        }
+    </style>
 </head>
 
 <body>
 
-    <!-- ===== TELA INICIAL ===== -->
+    <!-- TELA INICIAL -->
     <div id="screen-start" class="screen active">
         <div class="particles" id="particles"></div>
-        <div class="start-center">
-            <div class="logo-emblem">🏛️</div>
-            <h1 class="game-title">The Silent<br>Curator</h1>
-            <p class="game-tagline">Analise. Decida. Proteja a História.</p>
-            <div class="start-features">
-                <span>🔍 Ferramentas de Inspeção</span>
-                <span>🏷️ Leilões Misteriosos</span>
-                <span>🎒 Coleção Pessoal</span>
+        <div class="start-wrap">
+            <div class="start-icon">🏛️</div>
+            <h1 class="start-title">The Silent<br>Curator</h1>
+            <p class="start-sub">Analise. Decida. Conserve o Tempo.</p>
+            <p class="start-desc">Como curador desta galeria atemporal, você deve inspecionar cada item.<br>Procure por
+                anacronismos, marcas místicas ou pesos inconsistentes.</p>
+            <div class="start-tags">
+                <span>🔍 Ferramentas</span>
+                <span>🏷️ Leilões</span>
+                <span>🎒 Coleção</span>
+                <span>🏪 Loja</span>
             </div>
             <button class="btn-gold" onclick="startGame()">Abrir Galeria</button>
-            <p class="version-tag">v2.0 — Edição Completa</p>
         </div>
     </div>
 
-    <!-- ===== TELA DE LEILÃO ===== -->
+    <!-- LEILÃO -->
     <div id="screen-auction" class="screen">
-        <div class="auction-bg"></div>
-        <div class="auction-container">
-            <div class="auction-header">
-                <span class="auction-badge">LEILÃO #<span id="auction-number">1</span></span>
-                <h2 id="auction-house">Casa de Leilões Sotheby's</h2>
+        <div class="auction-wrap">
+            <div class="auction-head">
+                <div class="auction-badge">LEILÃO #<span id="auc-num">1</span></div>
+                <div class="auction-house" id="auc-house">Casa de Leilões</div>
             </div>
             <div class="auction-body">
-                <div class="auction-image-frame">
-                    <img id="auction-img" src="" alt="Objeto do leilão">
-                </div>
+                <div class="auction-frame"><img id="auc-img" src="" alt=""></div>
                 <div class="auction-info">
-                    <h3 id="auction-item-name">Nome do Objeto</h3>
-                    <p id="auction-origin" class="auction-origin">Origem desconhecida</p>
-                    <p id="auction-description" class="auction-desc">Descrição do item arrematado...</p>
-                    <div class="auction-price">
-                        <span class="price-label">Arrematado por:</span>
-                        <span class="price-value" id="auction-price">$12.500</span>
-                    </div>
-                    <button class="btn-gold" onclick="goToInspection()">Iniciar Inspeção →</button>
+                    <h3 id="auc-name">Objeto</h3>
+                    <p class="auc-origin" id="auc-origin">Origem</p>
+                    <p class="auc-desc" id="auc-desc">Descrição</p>
+                    <p class="auc-price-label">Arrematado por:</p>
+                    <p class="auc-price" id="auc-price">$0</p>
+                    <button class="btn-gold btn-sm" onclick="goInspection()">Iniciar Inspeção →</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ===== TELA DE INSPEÇÃO (PRINCIPAL) ===== -->
+    <!-- INSPEÇÃO -->
     <div id="screen-inspection" class="screen">
-        <!-- HUD Superior -->
-        <div class="hud-top">
-            <div class="hud-score">
-                <span class="hud-label">Pontuação</span>
-                <span class="hud-value" id="hud-score">0</span>
+        <div class="hud">
+            <div class="hud-item"><span class="hud-lbl">Pontuação</span><span class="hud-val" id="h-score">0</span>
             </div>
-            <div class="hud-coins">
-                <span class="hud-label">Moedas</span>
-                <span class="hud-value" id="hud-coins">💰 0</span>
+            <div class="hud-item"><span class="hud-lbl">Moedas</span><span class="hud-val" id="h-coins">💰 50</span>
             </div>
-            <div class="hud-level">
-                <span class="hud-label">Item</span>
-                <span class="hud-value" id="hud-level">1 / 5</span>
-            </div>
-            <div class="hud-actions">
-                <button class="hud-btn" onclick="openBackpack()" title="Mochila">🎒</button>
+            <div class="hud-item"><span class="hud-lbl">Item</span><span class="hud-val" id="h-level">1/4</span></div>
+            <div class="hud-right">
+                <button class="hud-btn" onclick="openBP()" title="Mochila">🎒</button>
                 <button class="hud-btn" onclick="openShop()" title="Loja">🏪</button>
             </div>
         </div>
-
-        <div class="inspection-layout">
-            <!-- Painel de Ferramentas (Esquerda) -->
-            <aside class="tools-panel glass-dark">
-                <h3 class="panel-title">Equipamento</h3>
+        <div class="insp-layout">
+            <aside class="side-panel left">
+                <div class="ptitle">Equipamento</div>
                 <div class="tools-list">
-                    <button id="tool-loupe" class="tool-btn" onclick="toggleLoupe()">
-                        <span class="tool-icon">🔍</span>
-                        <span class="tool-name">Lupa</span>
-                        <span class="tool-level" id="loupe-level">Nv.1</span>
-                    </button>
-                    <button id="tool-uv" class="tool-btn" onclick="toggleUV()">
-                        <span class="tool-icon">🔦</span>
-                        <span class="tool-name">Luz UV</span>
-                        <span class="tool-level" id="uv-level">Nv.1</span>
-                    </button>
-                    <button id="tool-scale" class="tool-btn" onclick="useScale()">
-                        <span class="tool-icon">⚖️</span>
-                        <span class="tool-name">Balança</span>
-                        <span class="tool-level" id="scale-level">Nv.1</span>
-                    </button>
+                    <button id="t-loupe" class="tbtn" onclick="togLoupe()"><span class="ti">🔍</span><span
+                            class="tn">Lupa</span><span class="tl" id="tl-loupe">Nv.1</span></button>
+                    <button id="t-uv" class="tbtn" onclick="togUV()"><span class="ti">🔦</span><span class="tn">Luz
+                            UV</span><span class="tl" id="tl-uv">Nv.1</span></button>
+                    <button id="t-scale" class="tbtn" onclick="useScale()"><span class="ti">⚖️</span><span
+                            class="tn">Balança</span><span class="tl" id="tl-scale">Nv.1</span></button>
                 </div>
-
-                <!-- Manual na mesa de trabalho -->
-                <div class="manual-section">
-                    <h3 class="panel-title">📖 Manual de Análise</h3>
-                    <div class="manual-content" id="manual-content">
-                        <p class="manual-text">Selecione um item para ver as instruções de análise.</p>
+                <div class="manual-sec">
+                    <div class="ptitle">📖 Manual</div>
+                    <div id="manual-box">
+                        <pre class="manual-txt" id="manual-txt">Instruções...</pre>
                     </div>
                 </div>
             </aside>
-
-            <!-- Área Central de Inspeção -->
-            <main class="inspection-area">
-                <div class="object-viewer" id="object-viewer">
-                    <div class="viewer-frame">
-                        <div class="corner c-tl"></div>
-                        <div class="corner c-tr"></div>
-                        <div class="corner c-bl"></div>
-                        <div class="corner c-br"></div>
+            <main class="insp-center">
+                <div class="obj-viewer" id="obj-viewer">
+                    <div class="vf">
+                        <div class="vc tl"></div>
+                        <div class="vc tr"></div>
+                        <div class="vc bl"></div>
+                        <div class="vc br"></div>
                     </div>
-                    <img id="object-img" src="" alt="Objeto em análise" draggable="false">
-                    <!-- Lupa overlay -->
-                    <div id="loupe-lens" class="loupe-lens hidden"></div>
-                    <!-- UV overlay -->
-                    <div id="uv-overlay" class="uv-overlay hidden"></div>
-                    <!-- Anomaly markers (aparecem com ferramentas) -->
-                    <div id="anomaly-markers"></div>
+                    <img id="obj-img" src="" alt="" draggable="false">
+                    <div class="loupe" id="loupe-el"></div>
+                    <div class="uv-ov" id="uv-ov"></div>
+                    <div class="markers" id="markers"></div>
                 </div>
-                <p class="object-label" id="object-label">Nome do Objeto</p>
+                <p class="obj-name" id="obj-name">Objeto</p>
             </main>
-
-            <!-- Painel de Veredito (Direita) -->
-            <aside class="verdict-panel glass-dark">
-                <h3 class="panel-title">Veredito</h3>
-                <p class="verdict-question">Após sua análise cuidadosa, este objeto é:</p>
-                <div class="verdict-buttons">
-                    <button class="btn-verdict btn-legit" onclick="submitVerdict(false)">
-                        <span class="verdict-icon">✅</span>
-                        Legítimo
-                    </button>
-                    <button class="btn-verdict btn-anomaly" onclick="submitVerdict(true)">
-                        <span class="verdict-icon">⚠️</span>
-                        Anomalia
-                    </button>
+            <aside class="side-panel right">
+                <div class="ptitle">Veredito</div>
+                <p class="verd-q">Após sua inspeção, este objeto é:</p>
+                <div class="verd-btns">
+                    <button class="vbtn vbtn-ok" onclick="verdict(false)">✅ Legítimo</button>
+                    <button class="vbtn vbtn-bad" onclick="verdict(true)">⚠️ Anomalia</button>
                 </div>
-                <div class="tool-result hidden" id="tool-result">
-                    <p id="tool-result-text"></p>
+                <div class="tool-res" id="tool-res">
+                    <p id="tool-res-txt"></p>
                 </div>
             </aside>
         </div>
     </div>
 
-    <!-- ===== MODAL: RESULTADO ===== -->
-    <div id="modal-result" class="modal hidden">
-        <div class="modal-backdrop"></div>
-        <div class="modal-box" id="result-box">
-            <div class="result-icon" id="result-icon">✅</div>
-            <h2 id="result-title">Resultado</h2>
-            <p id="result-detail"></p>
-            <div class="result-rewards" id="result-rewards"></div>
-            <button class="btn-gold" id="btn-result-next" onclick="nextFromResult()">Próximo Item</button>
+    <!-- MODAL: RESULTADO -->
+    <div id="m-result" class="modal">
+        <div class="modal-bg"></div>
+        <div class="mbox" id="res-box">
+            <div class="micon" id="res-icon">✅</div>
+            <h2 id="res-title">Resultado</h2>
+            <p id="res-detail"></p>
+            <div class="rewards" id="res-rewards"></div>
+            <button class="btn-gold btn-sm" onclick="nextItem()">Próximo Item</button>
         </div>
     </div>
 
-    <!-- ===== MODAL: LOJA ===== -->
-    <div id="modal-shop" class="modal hidden">
-        <div class="modal-backdrop" onclick="closeShop()"></div>
-        <div class="modal-box shop-box">
+    <!-- MODAL: LOJA -->
+    <div id="m-shop" class="modal">
+        <div class="modal-bg" onclick="closeShop()"></div>
+        <div class="mbox wide">
             <h2>🏪 Loja do Curador</h2>
-            <p class="shop-subtitle">Use suas moedas para melhorar seus equipamentos.</p>
-            <div class="shop-grid" id="shop-grid"></div>
+            <p class="shop-sub">Melhore seus equipamentos com moedas.</p>
+            <div class="sgrid" id="shop-grid"></div>
             <button class="btn-close" onclick="closeShop()">Fechar</button>
         </div>
     </div>
 
-    <!-- ===== MODAL: MOCHILA ===== -->
-    <div id="modal-backpack" class="modal hidden">
-        <div class="modal-backdrop" onclick="closeBackpack()"></div>
-        <div class="modal-box backpack-box">
+    <!-- MODAL: MOCHILA -->
+    <div id="m-bp" class="modal">
+        <div class="modal-bg" onclick="closeBP()"></div>
+        <div class="mbox wide">
             <h2>🎒 Coleção Pessoal</h2>
-            <p class="shop-subtitle">Objetos que você identificou corretamente.</p>
-            <div class="backpack-grid" id="backpack-grid">
-                <p class="empty-backpack">Sua mochila está vazia. Analise objetos para colecioná-los!</p>
+            <p class="shop-sub">Objetos identificados corretamente.</p>
+            <div class="bgrid" id="bp-grid">
+                <p class="empty-bp">Sua mochila está vazia.</p>
             </div>
-            <button class="btn-close" onclick="closeBackpack()">Fechar</button>
+            <button class="btn-close" onclick="closeBP()">Fechar</button>
         </div>
     </div>
 
-    <!-- ===== MODAL: FIM DE JOGO ===== -->
-    <div id="modal-gameover" class="modal hidden">
-        <div class="modal-backdrop"></div>
-        <div class="modal-box gameover-box">
-            <div class="result-icon">🏆</div>
+    <!-- MODAL: FIM -->
+    <div id="m-end" class="modal">
+        <div class="modal-bg"></div>
+        <div class="mbox">
+            <div class="micon">🏆</div>
             <h2>Galeria Concluída!</h2>
-            <p id="final-summary"></p>
-            <div class="final-stats" id="final-stats"></div>
-            <button class="btn-gold" onclick="location.reload()">Jogar Novamente</button>
+            <p id="end-sum"></p>
+            <div class="fstats" id="end-stats"></div>
+            <button class="btn-gold btn-sm" onclick="location.reload()">Jogar Novamente</button>
         </div>
     </div>
 

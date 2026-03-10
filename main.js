@@ -1,462 +1,318 @@
 /* ==========================================
-   THE SILENT CURATOR — GAME LOGIC
-   Versão 2.0 — Sem dependência de Three.js
+   THE SILENT CURATOR — GAME v2.0
+   Sem dependências externas
    ========================================== */
 
-// ===== DADOS DOS ARTEFATOS =====
-var ARTIFACTS = [
+var ITEMS = [
     {
-        id: "vaso",
-        name: "Vaso Grego Antigo",
+        id: "vaso", name: "Vaso Grego Antigo",
         image: "./assets/vaso grego.png",
         isAnomaly: true,
-        auctionHouse: "Casa de Leilões Christie's — Londres",
-        auctionPrice: "$18.500",
+        house: "Casa de Leilões Christie's — Londres",
+        price: "$18.500",
         origin: "Escavação arqueológica em Atenas, Grécia — 340 a.C.",
-        description: "Um vaso cerâmico com figuras negras típicas do período clássico grego. Foi encontrado em uma tumba real durante escavações recentes.",
-        manualHint: "🔍 Use a LUPA para examinar a base do vaso. Vasos autênticos não possuem marcações digitais.\n\n⚖️ Use a BALANÇA para verificar o peso — cerâmica antiga é mais leve que réplicas modernas.\n\n📌 PROCURE: Códigos de barras, etiquetas ou marcas de fábrica modernas.",
-        anomalyDetail: "Código de barras moderno encontrado na base do vaso.",
-        anomalyMarkers: [
-            { x: 48, y: 88, w: 8, h: 5, tool: "loupe", label: "Código de barras" }
-        ],
-        uvReaction: false,
-        weight: "1.8kg",
-        expectedWeight: "0.9kg"
+        desc: "Um vaso cerâmico com figuras negras típicas do período clássico grego. Foi encontrado em uma tumba real durante escavações recentes.",
+        manual: "🔍 Use a LUPA para examinar a base.\nVasos autênticos NÃO possuem marcações digitais.\n\n⚖️ Use a BALANÇA para verificar o peso.\nCerâmica antiga é mais leve que réplicas.\n\n📌 PROCURE: Códigos de barras ou etiquetas modernas.",
+        anomalyText: "Código de barras moderno encontrado na base do vaso.",
+        markers: [{ x: 48, y: 85, w: 8, h: 6, tool: "loupe", label: "Código de barras" }],
+        uvReact: false,
+        weight: "1.8kg", expected: "0.9kg"
     },
     {
-        id: "retrato",
-        name: "Retrato de Nobre",
+        id: "retrato", name: "Retrato de Nobre",
         image: "./assets/quadro nobre.jpg",
         isAnomaly: true,
-        auctionHouse: "Maison de Ventes Drouot — Paris",
-        auctionPrice: "$42.000",
+        house: "Maison de Ventes Drouot — Paris",
+        price: "$42.000",
         origin: "Coleção particular, família aristocrata portuguesa — séc. XIX",
-        description: "Retrato a óleo de um jovem nobre em trajes formais. A pintura apresenta tons escuros e traços de estilo neoclássico europeu.",
-        manualHint: "🔦 Use a LUZ UV para revelar reações na tinta. Pinturas com propriedades anômalas emitem brilho sob ultravioleta.\n\n🔍 Use a LUPA para examinar os olhos do retrato — há relatos de que 'os olhos seguem o observador'.\n\n📌 PROCURE: Brilho anormal sob UV, olhos com movimento estranho.",
-        anomalyDetail: "A pintura emite uma aura mística violeta sob luz ultravioleta. Os olhos parecem seguir o observador.",
-        anomalyMarkers: [
-            { x: 42, y: 35, w: 6, h: 4, tool: "uv", label: "Olho esquerdo reage" },
-            { x: 52, y: 35, w: 6, h: 4, tool: "uv", label: "Olho direito reage" }
-        ],
-        uvReaction: true,
-        weight: "2.1kg",
-        expectedWeight: "2.1kg"
+        desc: "Retrato a óleo de um jovem nobre em trajes formais. A pintura apresenta tons escuros e traços neoclássicos europeus.",
+        manual: "🔦 Use a LUZ UV para revelar reações na tinta.\nPinturas com propriedades anômalas emitem brilho.\n\n🔍 Use a LUPA nos olhos do retrato.\nHá relatos de que 'os olhos seguem o observador'.\n\n📌 PROCURE: Brilho anormal sob UV.",
+        anomalyText: "A pintura emite aura mística violeta sob luz UV. Os olhos parecem seguir o observador.",
+        markers: [{ x: 42, y: 32, w: 6, h: 4, tool: "uv", label: "Olho reage" }, { x: 52, y: 32, w: 6, h: 4, tool: "uv", label: "Olho reage" }],
+        uvReact: true,
+        weight: "2.1kg", expected: "2.1kg"
     },
     {
-        id: "relogio",
-        name: "Relógio de Bolso Vitoriano",
+        id: "relogio", name: "Relógio de Bolso Vitoriano",
         image: "./assets/relogio antigo.webp",
         isAnomaly: true,
-        auctionHouse: "Bonhams Auction House — Nova York",
-        auctionPrice: "$8.200",
+        house: "Bonhams Auction House — Nova York",
+        price: "$8.200",
         origin: "Espólio de relojoeiro em Manchester, Inglaterra — 1887",
-        description: "Relógio de bolso em ouro com mecanismo aparente. O tique-taque é preciso após mais de um século. Curiosamente, nunca precisou de manutenção.",
-        manualHint: "🔍 Use a LUPA para inspecionar o mecanismo. Relógios da era vitoriana não possuíam componentes eletrônicos.\n\n⚖️ Use a BALANÇA — se o peso for maior que o esperado, pode haver componentes ocultos.\n\n📌 PROCURE: Microchips, LEDs ou circuitos entre as engrenagens.",
-        anomalyDetail: "Microchip eletrônico encontrado entre as engrenagens mecânicas. O relógio não é puramente analógico.",
-        anomalyMarkers: [
-            { x: 35, y: 45, w: 5, h: 5, tool: "loupe", label: "Microchip detectado" }
-        ],
-        uvReaction: false,
-        weight: "450g",
-        expectedWeight: "280g"
+        desc: "Relógio de bolso em ouro com mecanismo aparente. O tique-taque é preciso após mais de um século.",
+        manual: "🔍 Use a LUPA para inspecionar o mecanismo.\nRelógios vitorianos NÃO tinham eletrônicos.\n\n⚖️ Use a BALANÇA — peso maior que o esperado\npode indicar componentes ocultos.\n\n📌 PROCURE: Microchips ou circuitos.",
+        anomalyText: "Microchip eletrônico encontrado entre as engrenagens mecânicas.",
+        markers: [{ x: 35, y: 45, w: 5, h: 5, tool: "loupe", label: "Microchip" }],
+        uvReact: false,
+        weight: "450g", expected: "280g"
     },
     {
-        id: "moeda",
-        name: "Moeda Romana de Ouro",
+        id: "moeda", name: "Moeda Romana de Ouro",
         image: "./assets/unnamed.jpg",
         isAnomaly: false,
-        auctionHouse: "Numismática Roma Aurea — Roma",
-        auctionPrice: "$5.800",
+        house: "Numismática Roma Aurea — Roma",
+        price: "$5.800",
         origin: "Sítio arqueológico no Fórum Romano — 27 a.C.",
-        description: "Moeda de ouro do período de Augusto com a face do imperador gravada. Apresenta desgaste natural compatível com a idade.",
-        manualHint: "🔍 Use a LUPA para verificar o desgaste natural. Moedas autênticas têm erosão uniforme.\n\n⚖️ A BALANÇA deve confirmar peso consistente com ouro antigo.\n\n🔦 Sob LUZ UV, ouro autêntico NÃO deve reagir.\n\n📌 Esta peça pode ser genuína. Analise com cuidado antes de julgar.",
-        anomalyDetail: "Peça autêntica do período de Augusto. Ouro puro com desgaste natural.",
-        anomalyMarkers: [],
-        uvReaction: false,
-        weight: "8.4g",
-        expectedWeight: "8.4g"
+        desc: "Moeda de ouro do período de Augusto com a face do imperador. Apresenta desgaste natural compatível com a idade.",
+        manual: "🔍 Verifique o desgaste com a LUPA.\nMoedas autênticas têm erosão uniforme.\n\n⚖️ A BALANÇA deve confirmar peso consistente.\n\n🔦 Sob LUZ UV, ouro autêntico NÃO reage.\n\n📌 Esta peça PODE ser genuína. Cuidado!",
+        anomalyText: "Peça autêntica do período de Augusto. Ouro puro com desgaste natural.",
+        markers: [],
+        uvReact: false,
+        weight: "8.4g", expected: "8.4g"
     }
 ];
 
-// ===== ITENS DA LOJA =====
-var SHOP_ITEMS = [
-    { id: "loupe_2", name: "Lupa Avançada", desc: "Zoom 2x maior", cost: 150, tool: "loupe", level: 2, icon: "🔍" },
-    { id: "loupe_3", name: "Lupa Profissional", desc: "Zoom 3x + detecção", cost: 400, tool: "loupe", level: 3, icon: "🔎" },
-    { id: "uv_2", name: "UV de Onda Longa", desc: "Revelação mais intensa", cost: 150, tool: "uv", level: 2, icon: "🔦" },
-    { id: "uv_3", name: "UV de Espectro Total", desc: "Revela todo o espectro", cost: 400, tool: "uv", level: 3, icon: "💡" },
-    { id: "scale_2", name: "Balança Digital", desc: "Precisão de 0.1g", cost: 200, tool: "scale", level: 2, icon: "⚖️" }
+var SHOP = [
+    { id: "l2", name: "Lupa Avançada", desc: "Zoom 2x maior", cost: 150, tool: "loupe", lv: 2, icon: "🔍" },
+    { id: "l3", name: "Lupa Pro", desc: "Zoom 3x + detecção", cost: 400, tool: "loupe", lv: 3, icon: "🔎" },
+    { id: "u2", name: "UV Onda Longa", desc: "Revelação intensa", cost: 150, tool: "uv", lv: 2, icon: "🔦" },
+    { id: "u3", name: "UV Espectro Total", desc: "Todo o espectro", cost: 400, tool: "uv", lv: 3, icon: "💡" },
+    { id: "s2", name: "Balança Digital", desc: "Precisão 0.1g", cost: 200, tool: "scale", lv: 2, icon: "⚖️" }
 ];
 
-// ===== ESTADO DO JOGO =====
-var gameState = {
-    currentLevel: 0,
+// Estado
+var G = {
+    lvl: 0,
     score: 0,
     coins: 50,
-    toolLevels: { loupe: 1, uv: 1, scale: 1 },
-    backpack: [],
-    loupeActive: false,
-    uvActive: false,
-    purchased: []
+    tools: { loupe: 1, uv: 1, scale: 1 },
+    bag: [],
+    bought: [],
+    loupe: false,
+    uv: false
 };
 
-// ===== NAVEGAÇÃO ENTRE TELAS =====
-function showScreen(id) {
-    var screens = document.querySelectorAll('.screen');
-    for (var i = 0; i < screens.length; i++) {
-        screens[i].classList.remove('active');
-    }
+// === NAVEGAÇÃO ===
+function show(id) {
+    var s = document.querySelectorAll('.screen');
+    for (var i = 0; i < s.length; i++) s[i].classList.remove('active');
     document.getElementById(id).classList.add('active');
 }
 
 function startGame() {
-    gameState.currentLevel = 0;
-    gameState.score = 0;
-    gameState.coins = 50;
-    gameState.backpack = [];
+    G.lvl = 0; G.score = 0; G.coins = 50; G.bag = []; G.bought = [];
+    G.tools = { loupe: 1, uv: 1, scale: 1 };
     showAuction(0);
 }
 
-function showAuction(index) {
-    var item = ARTIFACTS[index];
-    document.getElementById('auction-number').innerText = (index + 1);
-    document.getElementById('auction-house').innerText = item.auctionHouse;
-    document.getElementById('auction-img').src = item.image;
-    document.getElementById('auction-item-name').innerText = item.name;
-    document.getElementById('auction-origin').innerText = item.origin;
-    document.getElementById('auction-description').innerText = item.description;
-    document.getElementById('auction-price').innerText = item.auctionPrice;
-    showScreen('screen-auction');
+function showAuction(i) {
+    var d = ITEMS[i];
+    document.getElementById('auc-num').innerText = i + 1;
+    document.getElementById('auc-house').innerText = d.house;
+    document.getElementById('auc-img').src = d.image;
+    document.getElementById('auc-name').innerText = d.name;
+    document.getElementById('auc-origin').innerText = d.origin;
+    document.getElementById('auc-desc').innerText = d.desc;
+    document.getElementById('auc-price').innerText = d.price;
+    show('screen-auction');
 }
 
-function goToInspection() {
-    loadInspection(gameState.currentLevel);
-    showScreen('screen-inspection');
+function goInspection() {
+    loadItem(G.lvl);
+    show('screen-inspection');
 }
 
-function loadInspection(index) {
-    var item = ARTIFACTS[index];
+function loadItem(i) {
+    var d = ITEMS[i];
+    G.loupe = false; G.uv = false;
+    document.getElementById('t-loupe').classList.remove('active');
+    document.getElementById('t-uv').classList.remove('active');
+    document.getElementById('loupe-el').style.display = 'none';
+    document.getElementById('uv-ov').style.display = 'none';
+    document.getElementById('obj-viewer').classList.remove('uv-on');
+    document.getElementById('markers').innerHTML = '';
+    var tr = document.getElementById('tool-res');
+    tr.className = 'tool-res'; tr.style.display = 'none';
 
-    // Reset tools
-    gameState.loupeActive = false;
-    gameState.uvActive = false;
-    document.getElementById('tool-loupe').classList.remove('active');
-    document.getElementById('tool-uv').classList.remove('active');
-    document.getElementById('loupe-lens').classList.add('hidden');
-    document.getElementById('uv-overlay').classList.add('hidden');
-    document.getElementById('tool-result').classList.add('hidden');
-    document.getElementById('anomaly-markers').innerHTML = '';
+    document.getElementById('obj-img').src = d.image;
+    document.getElementById('obj-name').innerText = d.name;
+    document.getElementById('manual-txt').innerText = d.manual;
 
-    // Set image
-    document.getElementById('object-img').src = item.image;
-    document.getElementById('object-label').innerText = item.name;
-
-    // Manual
-    document.getElementById('manual-content').innerHTML = '<pre class="manual-text">' + item.manualHint + '</pre>';
-
-    // HUD
-    updateHUD();
-
-    // Tool levels
-    document.getElementById('loupe-level').innerText = 'Nv.' + gameState.toolLevels.loupe;
-    document.getElementById('uv-level').innerText = 'Nv.' + gameState.toolLevels.uv;
-    document.getElementById('scale-level').innerText = 'Nv.' + gameState.toolLevels.scale;
+    document.getElementById('tl-loupe').innerText = 'Nv.' + G.tools.loupe;
+    document.getElementById('tl-uv').innerText = 'Nv.' + G.tools.uv;
+    document.getElementById('tl-scale').innerText = 'Nv.' + G.tools.scale;
+    updHUD();
 }
 
-function updateHUD() {
-    document.getElementById('hud-score').innerText = gameState.score;
-    document.getElementById('hud-coins').innerText = '💰 ' + gameState.coins;
-    document.getElementById('hud-level').innerText = (gameState.currentLevel + 1) + ' / ' + ARTIFACTS.length;
+function updHUD() {
+    document.getElementById('h-score').innerText = G.score;
+    document.getElementById('h-coins').innerText = '💰 ' + G.coins;
+    document.getElementById('h-level').innerText = (G.lvl + 1) + '/' + ITEMS.length;
 }
 
-// ===== FERRAMENTAS =====
-
-// --- LUPA ---
-function toggleLoupe() {
-    gameState.loupeActive = !gameState.loupeActive;
-    document.getElementById('tool-loupe').classList.toggle('active', gameState.loupeActive);
-    document.getElementById('loupe-lens').classList.toggle('hidden', !gameState.loupeActive);
-
-    if (gameState.loupeActive) {
-        // Desativa UV se ativo
-        if (gameState.uvActive) toggleUV();
-        showAnomalyMarkers('loupe');
+// === FERRAMENTAS ===
+function togLoupe() {
+    G.loupe = !G.loupe;
+    document.getElementById('t-loupe').classList.toggle('active', G.loupe);
+    document.getElementById('loupe-el').style.display = G.loupe ? 'block' : 'none';
+    if (G.loupe) {
+        if (G.uv) togUV();
+        showMarkers('loupe');
     } else {
-        hideAnomalyMarkers();
+        clearMarkers();
     }
 }
 
-// Lupa segue o mouse
 document.addEventListener('mousemove', function (e) {
-    if (!gameState.loupeActive) return;
-    var viewer = document.getElementById('object-viewer');
-    var rect = viewer.getBoundingClientRect();
-    var lens = document.getElementById('loupe-lens');
-
-    var x = e.clientX - rect.left;
-    var y = e.clientY - rect.top;
-
-    // Só mostra se dentro da área do viewer
-    if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
-        var size = 120 + (gameState.toolLevels.loupe * 30);
-        var zoom = 1.5 + (gameState.toolLevels.loupe * 0.5);
-
-        lens.style.width = size + 'px';
-        lens.style.height = size + 'px';
-        lens.style.left = (x - size / 2) + 'px';
-        lens.style.top = (y - size / 2) + 'px';
-
-        var img = document.getElementById('object-img');
-        var imgRect = img.getBoundingClientRect();
-        var bgX = ((e.clientX - imgRect.left) / imgRect.width) * 100;
-        var bgY = ((e.clientY - imgRect.top) / imgRect.height) * 100;
-
+    if (!G.loupe) return;
+    var v = document.getElementById('obj-viewer');
+    var r = v.getBoundingClientRect();
+    var lens = document.getElementById('loupe-el');
+    var x = e.clientX - r.left, y = e.clientY - r.top;
+    if (x >= 0 && x <= r.width && y >= 0 && y <= r.height) {
+        var sz = 100 + (G.tools.loupe * 25);
+        var zm = 1.5 + (G.tools.loupe * 0.5);
+        lens.style.width = sz + 'px'; lens.style.height = sz + 'px';
+        lens.style.left = (x - sz / 2) + 'px'; lens.style.top = (y - sz / 2) + 'px';
+        var img = document.getElementById('obj-img');
+        var ir = img.getBoundingClientRect();
+        var bx = ((e.clientX - ir.left) / ir.width) * 100;
+        var by = ((e.clientY - ir.top) / ir.height) * 100;
         lens.style.backgroundImage = 'url(' + img.src + ')';
-        lens.style.backgroundSize = (imgRect.width * zoom) + 'px ' + (imgRect.height * zoom) + 'px';
-        lens.style.backgroundPosition = (bgX) + '% ' + (bgY) + '%';
-        lens.classList.remove('hidden');
+        lens.style.backgroundSize = (ir.width * zm) + 'px ' + (ir.height * zm) + 'px';
+        lens.style.backgroundPosition = bx + '% ' + by + '%';
+        lens.style.display = 'block';
     } else {
-        lens.classList.add('hidden');
+        lens.style.display = 'none';
     }
 });
 
-// --- LUZ UV ---
-function toggleUV() {
-    gameState.uvActive = !gameState.uvActive;
-    document.getElementById('tool-uv').classList.toggle('active', gameState.uvActive);
-    document.getElementById('uv-overlay').classList.toggle('hidden', !gameState.uvActive);
-
-    var viewer = document.getElementById('object-viewer');
-    viewer.classList.toggle('uv-mode', gameState.uvActive);
-
-    if (gameState.uvActive) {
-        if (gameState.loupeActive) toggleLoupe();
-
-        var item = ARTIFACTS[gameState.currentLevel];
-        if (item.uvReaction) {
-            showAnomalyMarkers('uv');
-        }
+function togUV() {
+    G.uv = !G.uv;
+    document.getElementById('t-uv').classList.toggle('active', G.uv);
+    document.getElementById('uv-ov').style.display = G.uv ? 'block' : 'none';
+    document.getElementById('obj-viewer').classList.toggle('uv-on', G.uv);
+    if (G.uv) {
+        if (G.loupe) togLoupe();
+        if (ITEMS[G.lvl].uvReact) showMarkers('uv');
     } else {
-        hideAnomalyMarkers();
+        clearMarkers();
     }
 }
 
-// --- BALANÇA ---
 function useScale() {
-    var item = ARTIFACTS[gameState.currentLevel];
-    var resultDiv = document.getElementById('tool-result');
-    var resultText = document.getElementById('tool-result-text');
-
-    var match = (item.weight === item.expectedWeight);
-    var precision = gameState.toolLevels.scale >= 2 ? ' (±0.1g)' : ' (±5g)';
-
-    resultText.innerHTML = '⚖️ <strong>Peso detectado:</strong> ' + item.weight + precision +
-        '<br>📊 <strong>Peso esperado:</strong> ' + item.expectedWeight +
-        '<br>' + (match ? '✅ Peso consistente.' : '⚠️ DISCREPÂNCIA DE PESO DETECTADA!');
-
-    resultDiv.classList.remove('hidden');
-    resultDiv.className = match ? 'tool-result result-ok' : 'tool-result result-warning';
+    var d = ITEMS[G.lvl];
+    var ok = (d.weight === d.expected);
+    var prec = G.tools.scale >= 2 ? ' (±0.1g)' : ' (±5g)';
+    var tr = document.getElementById('tool-res');
+    var tt = document.getElementById('tool-res-txt');
+    tt.innerHTML = '⚖️ <b>Peso:</b> ' + d.weight + prec + '<br>📊 <b>Esperado:</b> ' + d.expected + '<br>' + (ok ? '✅ Peso consistente.' : '⚠️ DISCREPÂNCIA DETECTADA!');
+    tr.style.display = 'block';
+    tr.className = ok ? 'tool-res tres-ok' : 'tool-res tres-warn';
 }
 
-// --- INDICADORES DE ANOMALIA ---
-function showAnomalyMarkers(tool) {
-    var item = ARTIFACTS[gameState.currentLevel];
-    var container = document.getElementById('anomaly-markers');
-    container.innerHTML = '';
-
-    for (var i = 0; i < item.anomalyMarkers.length; i++) {
-        var m = item.anomalyMarkers[i];
+function showMarkers(tool) {
+    var d = ITEMS[G.lvl];
+    var c = document.getElementById('markers');
+    c.innerHTML = '';
+    for (var i = 0; i < d.markers.length; i++) {
+        var m = d.markers[i];
         if (m.tool === tool) {
             var div = document.createElement('div');
-            div.className = 'anomaly-marker pulse';
-            div.style.left = m.x + '%';
-            div.style.top = m.y + '%';
-            div.style.width = m.w + '%';
-            div.style.height = m.h + '%';
-            div.title = m.label;
-
-            var label = document.createElement('span');
-            label.className = 'marker-label';
-            label.innerText = m.label;
-            div.appendChild(label);
-
-            container.appendChild(div);
+            div.className = 'amarker';
+            div.style.left = m.x + '%'; div.style.top = m.y + '%';
+            div.style.width = m.w + '%'; div.style.height = m.h + '%';
+            var lbl = document.createElement('span');
+            lbl.className = 'mlabel'; lbl.innerText = m.label;
+            div.appendChild(lbl);
+            c.appendChild(div);
         }
     }
 }
 
-function hideAnomalyMarkers() {
-    document.getElementById('anomaly-markers').innerHTML = '';
-}
+function clearMarkers() { document.getElementById('markers').innerHTML = ''; }
 
-// ===== SISTEMA DE VEREDITO =====
-function submitVerdict(isAnomalyChoice) {
-    var item = ARTIFACTS[gameState.currentLevel];
-    var correct = (isAnomalyChoice === item.isAnomaly);
+// === VEREDITO ===
+function verdict(isAnom) {
+    var d = ITEMS[G.lvl];
+    var ok = (isAnom === d.isAnomaly);
+    var box = document.getElementById('res-box');
+    var icon = document.getElementById('res-icon');
+    var title = document.getElementById('res-title');
+    var detail = document.getElementById('res-detail');
+    var rew = document.getElementById('res-rewards');
 
-    var modal = document.getElementById('modal-result');
-    var box = document.getElementById('result-box');
-    var icon = document.getElementById('result-icon');
-    var title = document.getElementById('result-title');
-    var detail = document.getElementById('result-detail');
-    var rewards = document.getElementById('result-rewards');
-
-    if (correct) {
-        var earned = 100 + (gameState.toolLevels.loupe * 10);
-        var coinsEarned = 50;
-        gameState.score += earned;
-        gameState.coins += coinsEarned;
-
-        // Adicionar à mochila
-        gameState.backpack.push({
-            id: item.id,
-            name: item.name,
-            image: item.image,
-            origin: item.origin
-        });
-
-        icon.innerText = '✅';
-        box.className = 'modal-box result-success';
+    if (ok) {
+        var pts = 100 + (G.tools.loupe * 10);
+        var cns = 50;
+        G.score += pts; G.coins += cns;
+        G.bag.push({ id: d.id, name: d.name, image: d.image, origin: d.origin });
+        icon.innerText = '✅'; box.className = 'mbox';
         title.innerText = 'Veredito Correto!';
-        detail.innerText = item.anomalyDetail;
-        rewards.innerHTML = '<div class="reward-item">+' + earned + ' pontos</div>' +
-            '<div class="reward-item">+' + coinsEarned + ' moedas 💰</div>' +
-            '<div class="reward-item">🎒 ' + item.name + ' adicionado à mochila</div>';
+        detail.innerText = d.anomalyText;
+        rew.innerHTML = '<div class="rew">+' + pts + ' pontos</div><div class="rew">+' + cns + ' moedas 💰</div><div class="rew">🎒 ' + d.name + ' → mochila</div>';
     } else {
-        icon.innerText = '❌';
-        box.className = 'modal-box result-failure';
+        G.score = Math.max(0, G.score - 50);
+        icon.innerText = '❌'; box.className = 'mbox fail';
         title.innerText = 'Erro de Curadoria';
-        detail.innerText = item.isAnomaly ?
-            'Você deixou passar uma anomalia: ' + item.anomalyDetail :
-            'Você condenou um artefato legítimo. ' + item.name + ' era autêntico!';
-        rewards.innerHTML = '<div class="reward-item penalty">-50 pontos</div>';
-        gameState.score = Math.max(0, gameState.score - 50);
+        detail.innerText = d.isAnomaly ? 'Era uma anomalia: ' + d.anomalyText : 'O item era legítimo. ' + d.name + ' era autêntico!';
+        rew.innerHTML = '<div class="rew bad">-50 pontos</div>';
     }
-
-    updateHUD();
-    modal.classList.remove('hidden');
+    updHUD();
+    document.getElementById('m-result').classList.add('open');
 }
 
-function nextFromResult() {
-    document.getElementById('modal-result').classList.add('hidden');
-    gameState.currentLevel++;
-
-    if (gameState.currentLevel >= ARTIFACTS.length) {
-        showGameOver();
+function nextItem() {
+    document.getElementById('m-result').classList.remove('open');
+    G.lvl++;
+    if (G.lvl >= ITEMS.length) {
+        document.getElementById('end-sum').innerText = 'Você inspecionou ' + ITEMS.length + ' artefatos com ' + G.score + ' pontos.';
+        document.getElementById('end-stats').innerHTML = '<div class="frow"><span>Pontuação</span><span>' + G.score + '</span></div><div class="frow"><span>Moedas</span><span>💰 ' + G.coins + '</span></div><div class="frow"><span>Coleção</span><span>🎒 ' + G.bag.length + '</span></div>';
+        document.getElementById('m-end').classList.add('open');
     } else {
-        showAuction(gameState.currentLevel);
+        showAuction(G.lvl);
     }
 }
 
-// ===== FIM DE JOGO =====
-function showGameOver() {
-    var modal = document.getElementById('modal-gameover');
-    document.getElementById('final-summary').innerText =
-        'Você inspecionou ' + ARTIFACTS.length + ' artefatos e acumulou ' + gameState.score + ' pontos.';
-
-    var stats = document.getElementById('final-stats');
-    stats.innerHTML = '<div class="stat-row"><span>Pontuação Final:</span><span>' + gameState.score + '</span></div>' +
-        '<div class="stat-row"><span>Moedas:</span><span>💰 ' + gameState.coins + '</span></div>' +
-        '<div class="stat-row"><span>Itens na Mochila:</span><span>🎒 ' + gameState.backpack.length + '</span></div>';
-
-    modal.classList.remove('hidden');
-}
-
-// ===== LOJA =====
+// === LOJA ===
 function openShop() {
-    var grid = document.getElementById('shop-grid');
-    grid.innerHTML = '';
-
-    for (var i = 0; i < SHOP_ITEMS.length; i++) {
-        var item = SHOP_ITEMS[i];
-        var owned = gameState.purchased.indexOf(item.id) !== -1;
-        var canAfford = gameState.coins >= item.cost;
-        var currentToolLevel = gameState.toolLevels[item.tool] || 0;
-        var available = item.level === currentToolLevel + 1;
-
-        var card = document.createElement('div');
-        card.className = 'shop-card' + (owned ? ' owned' : '') + (!canAfford && !owned ? ' expensive' : '');
-        card.innerHTML =
-            '<div class="shop-icon">' + item.icon + '</div>' +
-            '<h4>' + item.name + '</h4>' +
-            '<p>' + item.desc + '</p>' +
-            '<div class="shop-price">' +
-            (owned ? '✅ Comprado' : (available ? '💰 ' + item.cost : '🔒 Compre Nv.' + (item.level - 1) + ' primeiro')) +
-            '</div>';
-
-        if (!owned && canAfford && available) {
-            card.setAttribute('data-index', i);
-            card.addEventListener('click', (function (idx) {
-                return function () { buyItem(idx); };
-            })(i));
-            card.classList.add('buyable');
+    var g = document.getElementById('shop-grid'); g.innerHTML = '';
+    for (var i = 0; i < SHOP.length; i++) {
+        var s = SHOP[i];
+        var own = G.bought.indexOf(s.id) !== -1;
+        var afford = G.coins >= s.cost;
+        var avail = s.lv === (G.tools[s.tool] || 0) + 1;
+        var c = document.createElement('div');
+        c.className = 'scard' + (own ? ' own' : '') + ((!afford && !own) ? ' exp' : '') + ((!own && afford && avail) ? ' can' : '');
+        c.innerHTML = '<div class="si">' + s.icon + '</div><h4>' + s.name + '</h4><p>' + s.desc + '</p><div class="sp">' + (own ? '✅ Comprado' : (avail ? '💰 ' + s.cost : '🔒 Nv.' + (s.lv - 1) + ' primeiro')) + '</div>';
+        if (!own && afford && avail) {
+            c.setAttribute('data-i', i);
+            c.addEventListener('click', (function (idx) { return function () { buy(idx); }; })(i));
         }
-
-        grid.appendChild(card);
+        g.appendChild(c);
     }
-
-    document.getElementById('modal-shop').classList.remove('hidden');
+    document.getElementById('m-shop').classList.add('open');
 }
-
-function buyItem(index) {
-    var item = SHOP_ITEMS[index];
-    if (gameState.coins >= item.cost && gameState.purchased.indexOf(item.id) === -1) {
-        gameState.coins -= item.cost;
-        gameState.purchased.push(item.id);
-        gameState.toolLevels[item.tool] = item.level;
-        updateHUD();
-        openShop(); // Refresh
-
-        // Update tool level display
-        if (item.tool === 'loupe') document.getElementById('loupe-level').innerText = 'Nv.' + item.level;
-        if (item.tool === 'uv') document.getElementById('uv-level').innerText = 'Nv.' + item.level;
-        if (item.tool === 'scale') document.getElementById('scale-level').innerText = 'Nv.' + item.level;
+function buy(i) {
+    var s = SHOP[i];
+    if (G.coins >= s.cost && G.bought.indexOf(s.id) === -1) {
+        G.coins -= s.cost; G.bought.push(s.id); G.tools[s.tool] = s.lv;
+        updHUD(); openShop();
     }
 }
+function closeShop() { document.getElementById('m-shop').classList.remove('open'); }
 
-function closeShop() {
-    document.getElementById('modal-shop').classList.add('hidden');
+// === MOCHILA ===
+function openBP() {
+    var g = document.getElementById('bp-grid');
+    if (G.bag.length === 0) { g.innerHTML = '<p class="empty-bp">Sua mochila está vazia.</p>'; }
+    else { g.innerHTML = ''; for (var i = 0; i < G.bag.length; i++) { var b = G.bag[i]; var c = document.createElement('div'); c.className = 'bcard'; c.innerHTML = '<img src="' + b.image + '" alt=""><h4>' + b.name + '</h4><p>' + b.origin + '</p>'; g.appendChild(c); } }
+    document.getElementById('m-bp').classList.add('open');
 }
+function closeBP() { document.getElementById('m-bp').classList.remove('open'); }
 
-// ===== MOCHILA =====
-function openBackpack() {
-    var grid = document.getElementById('backpack-grid');
-
-    if (gameState.backpack.length === 0) {
-        grid.innerHTML = '<p class="empty-backpack">Sua mochila está vazia. Analise objetos para colecioná-los!</p>';
-    } else {
-        grid.innerHTML = '';
-        for (var i = 0; i < gameState.backpack.length; i++) {
-            var item = gameState.backpack[i];
-            var card = document.createElement('div');
-            card.className = 'backpack-card';
-            card.innerHTML = '<img src="' + item.image + '" alt="' + item.name + '">' +
-                '<h4>' + item.name + '</h4>' +
-                '<p>' + item.origin + '</p>';
-            grid.appendChild(card);
-        }
-    }
-
-    document.getElementById('modal-backpack').classList.remove('hidden');
-}
-
-function closeBackpack() {
-    document.getElementById('modal-backpack').classList.add('hidden');
-}
-
-// ===== PARTÍCULAS DO MENU =====
-function createParticles() {
-    var container = document.getElementById('particles');
-    if (!container) return;
-    for (var i = 0; i < 30; i++) {
+// === PARTÍCULAS ===
+(function () {
+    var c = document.getElementById('particles');
+    if (!c) return;
+    for (var i = 0; i < 25; i++) {
         var p = document.createElement('div');
         p.className = 'particle';
         p.style.left = Math.random() * 100 + '%';
         p.style.animationDuration = (3 + Math.random() * 7) + 's';
         p.style.animationDelay = (Math.random() * 5) + 's';
-        p.style.width = (2 + Math.random() * 4) + 'px';
-        p.style.height = p.style.width;
-        container.appendChild(p);
+        var sz = 2 + Math.random() * 3;
+        p.style.width = sz + 'px'; p.style.height = sz + 'px';
+        c.appendChild(p);
     }
-}
-
-createParticles();
+})();
