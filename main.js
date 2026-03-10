@@ -1,65 +1,58 @@
 import * as THREE from 'three';
 
-// --- ARTIFACT DATA ---
-const artifactsData = [
+// --- CONFIGURAÇÃO DOS ARTEFATOS ---
+const artifacts = [
     {
-        name: "Vaso Dinastia Ming",
+        id: "vaso",
+        name: "Vaso Grego",
+        texture: "./assets/vaso grego.png",
         isAnomaly: true,
-        instruction: "Verifique a base em busca de marcações anacrônicas.",
-        anomalyDetail: "Possui um código de barras moderno na base.",
-        color: 0x34495e,
-        shape: 'torus',
-        anomalyType: 'mesh',
-        weight: "1.2kg",
-        expectedWeight: "1.2kg"
+        instruction: "Verifique a base e a pintura em busca de códigos modernos.",
+        anomalyDetail: "A pintura contém um QR Code em estilo antigo na base.",
+        baseColor: 0x8b4513,
+        type: "3d_lathe",
+        weight: "1.5kg",
+        expectedWeight: "1.5kg"
     },
     {
-        name: "Relógio de Bolso Vitoriano",
+        id: "retrato",
+        name: "Retrato de Nobre",
+        texture: "./assets/quadro nobre.jpg",
         isAnomaly: true,
-        instruction: "Use a lupa para observar o interior das engrenagens.",
-        anomalyDetail: "Há um microchip eletrônico escondido no mecanismo.",
-        color: 0x95a5a6,
-        shape: 'cylinder',
-        anomalyType: 'chip',
-        weight: "250g",
-        expectedWeight: "250g"
+        instruction: "Inspecione os olhos do retrato com a luz UV.",
+        anomalyDetail: "Os olhos da pintura brilham com uma luz mística sob UV.",
+        baseColor: 0x5a3e2b,
+        type: "2d_painting",
+        weight: "2.1kg",
+        expectedWeight: "2.1kg"
     },
     {
-        name: "Moeda de Ouro Romana",
+        id: "relogio",
+        name: "Relógio de Bolso",
+        texture: "./assets/relogio antigo.webp",
+        isAnomaly: true,
+        instruction: "Use a lupa para ver os mecanismos internos.",
+        anomalyDetail: "Existe um microchip eletrônico entre as engrenagens mecânicas.",
+        baseColor: 0xd4af37,
+        type: "3d_watch",
+        weight: "450g",
+        expectedWeight: "300g" // Anomalia de peso
+    },
+    {
+        id: "reliquia_jade",
+        name: "Moeda Antiga",
+        texture: null, // Sem textura, apenas cor
         isAnomaly: false,
-        instruction: "Ouro real não deve reagir à luz UV. Verifique a pureza.",
-        anomalyDetail: "Peça autêntica do período de Augusto.",
-        color: 0xd4af37,
-        shape: 'coin',
-        anomalyType: 'none',
+        instruction: "Analise a pureza do metal. Itens genuínos são leves.",
+        anomalyDetail: "Moeda autêntica de ouro romano.",
+        baseColor: 0x27ae60,
+        type: "3d_coin",
         weight: "8.4g",
         expectedWeight: "8.4g"
-    },
-    {
-        name: "Estatueta de Jade",
-        isAnomaly: true,
-        instruction: "Relíquias místicas frequentemente brilham sob radiação ultravioleta.",
-        anomalyDetail: "A estatueta emite uma aura verde pulsante sob luz UV.",
-        color: 0x27ae60,
-        shape: 'octahedron',
-        anomalyType: 'uv',
-        weight: "300g",
-        expectedWeight: "300g"
-    },
-    {
-        name: "Cálice Real",
-        isAnomaly: true,
-        instruction: "Falsificações modernas costumam ter peso inconsistente.",
-        anomalyDetail: "O cálice é muito mais pesado do que o ouro maciço deveria ser (preenchido com chumbo).",
-        color: 0xffd700,
-        shape: 'box',
-        anomalyType: 'weight',
-        weight: "4.5kg",
-        expectedWeight: "2.1kg"
     }
 ];
 
-// --- GAME STATE ---
+// --- ESTADO DO JOGO ---
 let currentLevel = 0;
 let score = 0;
 let scene, camera, renderer, artifactGroup, currentMesh;
@@ -68,93 +61,102 @@ let previousMousePosition = { x: 0, y: 0 };
 let loupeActive = false;
 let uvActive = false;
 
-// --- INITIALIZATION ---
+// --- INICIALIZAÇÃO ---
 function init() {
-    const renderContainer = document.getElementById('container-objeto');
-    if (!renderContainer) return;
+    const container = document.getElementById('container-objeto');
+    if (!container) return;
 
-    // Scene setup
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0a0a0c);
-    scene.fog = new THREE.Fog(0x0a0a0c, 10, 25);
+    scene.background = new THREE.Color(0x0c0c10);
+    scene.fog = new THREE.Fog(0x0c0c10, 5, 20);
 
-    // Camera setup - Moved back to 8 as requested previously
-    camera = new THREE.PerspectiveCamera(45, renderContainer.clientWidth / renderContainer.clientHeight, 0.1, 1000);
-    camera.position.z = 8;
+    camera = new THREE.PerspectiveCamera(40, container.clientWidth / container.clientHeight, 0.1, 1000);
+    camera.position.z = 8; // Afastado para melhor visão
 
-    // Renderer setup
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(renderContainer.clientWidth, renderContainer.clientHeight);
+    renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderContainer.appendChild(renderer.domElement);
+    renderer.shadowMap.enabled = true;
+    container.appendChild(renderer.domElement);
 
-    // Lighting
+    // Luzes
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
 
-    const spotLight = new THREE.SpotLight(0xffffff, 1.5);
+    const spotLight = new THREE.SpotLight(0xffffff, 1.2);
     spotLight.position.set(5, 10, 5);
-    spotLight.angle = Math.PI / 6;
-    spotLight.penumbra = 0.4;
-    spotLight.decay = 2;
-    spotLight.distance = 40;
+    spotLight.castShadow = true;
+    spotLight.angle = Math.PI / 4;
+    spotLight.penumbra = 0.5;
     scene.add(spotLight);
 
-    // Group for the artifact
     artifactGroup = new THREE.Group();
     scene.add(artifactGroup);
 
-    setupEventListeners();
+    setupEvents();
     animate();
 }
 
 function loadArtifact(index) {
-    const data = artifactsData[index];
+    const data = artifacts[index];
     artifactGroup.clear();
 
-    // UI Updates
+    // UI
     document.getElementById('artifact-name').innerText = data.name;
     document.getElementById('artifact-instruction').innerText = data.instruction;
 
-    // Geometry selection
-    let geometry;
-    switch (data.shape) {
-        case 'torus': geometry = new THREE.TorusKnotGeometry(1, 0.3, 128, 32); break;
-        case 'cylinder': geometry = new THREE.CylinderGeometry(1.2, 1.2, 0.4, 64); break;
-        case 'octahedron': geometry = new THREE.OctahedronGeometry(1.5); break;
-        case 'coin': geometry = new THREE.CylinderGeometry(1.5, 1.5, 0.1, 64); break;
-        default: geometry = new THREE.BoxGeometry(1.8, 1.8, 1.8);
-    }
+    const textureLoader = new THREE.TextureLoader();
+    const texture = data.texture ? textureLoader.load(data.texture) : null;
 
+    let geometry;
     const material = new THREE.MeshStandardMaterial({
-        color: data.color,
-        metalness: 0.7,
-        roughness: 0.3,
-        emissive: 0x000000
+        color: texture ? 0xffffff : data.baseColor,
+        map: texture,
+        metalness: 0.4,
+        roughness: 0.6
     });
 
+    // Criação baseada no tipo
+    if (data.type === "3d_lathe") {
+        const points = [];
+        for (let i = 0; i < 12; i++) {
+            points.push(new THREE.Vector2(Math.sin(i * 0.3) * 1.5 + 1.0, (i - 5) * 0.5));
+        }
+        geometry = new THREE.LatheGeometry(points, 64);
+    } else if (data.type === "2d_painting") {
+        geometry = new THREE.BoxGeometry(3, 4, 0.2);
+    } else if (data.type === "3d_watch") {
+        geometry = new THREE.CylinderGeometry(1.5, 1.5, 0.5, 64);
+    } else {
+        geometry = new THREE.CylinderGeometry(1.5, 1.5, 0.1, 64);
+    }
+
     currentMesh = new THREE.Mesh(geometry, material);
+    currentMesh.castShadow = true;
+    currentMesh.receiveShadow = true;
     artifactGroup.add(currentMesh);
 
-    // ADD ANOMALIES
+    // ADICIONAR INDICADORES DE ANOMALIA
     if (data.isAnomaly) {
-        if (data.anomalyType === 'chip') {
+        if (data.id === "vaso") {
+            // QR Code falso na base
+            const qrGeo = new THREE.PlaneGeometry(0.3, 0.3);
+            const qrMat = new THREE.MeshBasicMaterial({ color: 0x000000 });
+            const qr = new THREE.Mesh(qrGeo, qrMat);
+            qr.position.set(0, -2.4, 0.8);
+            qr.rotation.x = -Math.PI / 4;
+            currentMesh.add(qr);
+        } else if (data.id === "relogio") {
+            // Microchip interno (visível só com a lupa e rotação)
             const chipGeo = new THREE.BoxGeometry(0.1, 0.1, 0.05);
-            const chipMat = new THREE.MeshStandardMaterial({ color: 0x00ff00, emissive: 0x00ff00 });
+            const chipMat = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
             const chip = new THREE.Mesh(chipGeo, chipMat);
-            chip.position.set(0.2, 0.3, 1.2);
+            chip.position.set(0.3, 0, 0.25);
             currentMesh.add(chip);
-        } else if (data.anomalyType === 'mesh') {
-            // Simulating barcode with small stripes
-            for (let i = 0; i < 5; i++) {
-                const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.2, 0.02), new THREE.MeshBasicMaterial({ color: 0x000000 }));
-                stripe.position.set(-0.1 + (i * 0.05), -1.3, 0.5);
-                currentMesh.add(stripe);
-            }
         }
     }
 
-    // Reset state
+    // Reset de estado
     artifactGroup.rotation.set(0, 0, 0);
     loupeActive = false;
     uvActive = false;
@@ -164,20 +166,17 @@ function loadArtifact(index) {
     resetUV();
 }
 
-// --- CONTROLS & EVENTS ---
-function setupEventListeners() {
+function setupEvents() {
     const btnStart = document.getElementById('btn-start-game');
-    const startScreen = document.getElementById('start-screen');
-    const uiOverlay = document.getElementById('ui-overlay');
     const container = document.getElementById('container-objeto');
 
     btnStart.addEventListener('click', () => {
-        startScreen.classList.add('hidden');
-        uiOverlay.classList.remove('hidden');
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('ui-overlay').classList.remove('hidden');
         loadArtifact(0);
     });
 
-    // Rotation logic
+    // Rotação
     container.addEventListener('mousedown', () => isDragging = true);
     window.addEventListener('mouseup', () => isDragging = false);
     window.addEventListener('mousemove', (e) => {
@@ -190,111 +189,98 @@ function setupEventListeners() {
         previousMousePosition = { x: e.clientX, y: e.clientY };
     });
 
-    // Tool: Loupe (Lupa)
+    // Ferramentas
     document.getElementById('btn-loupe').addEventListener('click', () => {
         loupeActive = !loupeActive;
         document.getElementById('btn-loupe').classList.toggle('active', loupeActive);
-        camera.position.z = loupeActive ? 4.5 : 8; // Zoom in/out
+        camera.position.z = loupeActive ? 4.5 : 8;
     });
 
-    // Tool: UV Light
     document.getElementById('btn-uv').addEventListener('click', () => {
         uvActive = !uvActive;
         document.getElementById('btn-uv').classList.toggle('active', uvActive);
         if (uvActive) {
-            scene.background = new THREE.Color(0x050010);
-            const data = artifactsData[currentLevel];
-            if (data.isAnomaly && data.anomalyType === 'uv') {
-                currentMesh.material.emissive.set(0x00ff00);
-                currentMesh.material.emissiveIntensity = 2.5;
+            scene.background = new THREE.Color(0x020010);
+            if (artifacts[currentLevel].id === "retrato") {
+                currentMesh.material.emissive.set(0x8800ff);
+                currentMesh.material.emissiveIntensity = 2.0;
             }
         } else {
             resetUV();
         }
     });
 
-    // Tool: Scale (Balança)
     document.getElementById('btn-scale').addEventListener('click', () => {
-        const data = artifactsData[currentLevel];
+        const item = artifacts[currentLevel];
         const info = document.getElementById('screen-info');
-        info.innerText = `BALANÇA: PESO DETECTADO ${data.weight} (ESPERADO: ${data.expectedWeight})`;
+        info.innerText = `BALANÇA: PESO DETECTADO ${item.weight} (ALVO: ${item.expectedWeight})`;
         info.classList.remove('hidden');
         info.classList.add('flash');
         setTimeout(() => {
-            info.classList.remove('flash');
             info.classList.add('hidden');
+            info.classList.remove('flash');
         }, 3000);
     });
 
-    // Verdict buttons
+    // Veredito
     document.getElementById('btn-normal').addEventListener('click', () => handleVerdict(false));
     document.getElementById('btn-anomaly').addEventListener('click', () => handleVerdict(true));
-
-    // Modal buttons
     document.getElementById('btn-next').addEventListener('click', nextLevel);
-    document.getElementById('btn-restart').addEventListener('click', restartGame);
+    document.getElementById('btn-restart').addEventListener('click', () => location.reload());
 
-    window.addEventListener('resize', onWindowResize);
+    window.addEventListener('resize', () => {
+        const c = document.getElementById('container-objeto');
+        camera.aspect = c.clientWidth / c.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(c.clientWidth, c.clientHeight);
+    });
 }
 
 function resetUV() {
-    scene.background = new THREE.Color(0x0a0a0c);
+    scene.background = new THREE.Color(0x0c0c10);
     if (currentMesh) {
         currentMesh.material.emissive.set(0x000000);
     }
 }
 
-function handleVerdict(playerChoiceIsAnomaly) {
-    const artifact = artifactsData[currentLevel];
-    const isCorrect = playerChoiceIsAnomaly === artifact.isAnomaly;
+function handleVerdict(isAnomalyChoice) {
+    const item = artifacts[currentLevel];
+    const correct = isAnomalyChoice === item.isAnomaly;
 
-    if (isCorrect) {
+    if (correct) {
         score += 100;
-        document.getElementById('feedback-title').innerText = "Veredito Correto";
-        document.getElementById('feedback-score').innerText = artifact.isAnomaly ?
-            `Anomalia identificada com sucesso: ${artifact.anomalyDetail}` :
-            "Você confirmou a autenticidade deste artefato genuíno.";
+        document.getElementById('feedback-title').innerText = "Veredito Aceito";
+        document.getElementById('feedback-score').innerText = item.isAnomaly ?
+            `Anomalia Neutralizada: ${item.anomalyDetail}` :
+            "Autenticidade Confirmada. O item é legítimo.";
         document.getElementById('feedback-modal').classList.remove('hidden');
     } else {
-        document.getElementById('game-over-message').innerText = artifact.isAnomaly ?
-            `Você falhou em identificar a anomalia: ${artifact.anomalyDetail}` :
-            `Você condenou injustamente um artefato legítimo. ${artifact.name} era autêntico.`;
+        document.getElementById('game-over-message').innerText = item.isAnomaly ?
+            `Você falhou. O objeto era uma anomalia: ${item.anomalyDetail}` :
+            `Erro Crítico. O objeto era legítimo. Você destruiu uma peça insubstituível.`;
         document.getElementById('game-over-modal').classList.remove('hidden');
     }
 }
 
 function nextLevel() {
     currentLevel++;
-    if (currentLevel < artifactsData.length) {
+    if (currentLevel < artifacts.length) {
         document.getElementById('feedback-modal').classList.add('hidden');
         loadArtifact(currentLevel);
     } else {
-        document.getElementById('feedback-title').innerText = "Jornada Concluída";
-        document.getElementById('feedback-score').innerText = `Parabéns, Curador. Você protegeu o museu com uma pontuação de ${score}.`;
-        document.getElementById('btn-next').innerText = "Recomeçar Turno";
+        document.getElementById('feedback-title').innerText = "Galeria Concluída";
+        document.getElementById('feedback-score').innerText = `Parabéns. Sua precisão protegeu a história. Pontuação: ${score}`;
+        document.getElementById('btn-next').innerText = "Finalizar Turno";
         document.getElementById('btn-next').onclick = () => location.reload();
     }
-}
-
-function restartGame() {
-    location.reload();
-}
-
-function onWindowResize() {
-    const container = document.getElementById('container-objeto');
-    if (!container) return;
-    camera.aspect = container.clientWidth / container.clientHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight);
 }
 
 function animate() {
     requestAnimationFrame(animate);
     if (!isDragging && currentMesh) {
-        artifactGroup.rotation.y += 0.002;
+        artifactGroup.rotation.y += 0.003;
     }
     renderer.render(scene, camera);
 }
 
-// --- START ---
 init();

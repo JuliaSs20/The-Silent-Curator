@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Silent Curator</title>
     <link rel="stylesheet" href="./style.css">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600;700&family=Inter:wght@300;400;500&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
@@ -14,24 +18,25 @@
         <div id="start-screen" class="screen-overlay">
             <div class="start-content">
                 <h1 class="title-main">The Silent Curator</h1>
-                <p class="subtitle">Analise. Identifique. Proteja o legado.</p>
+                <p class="subtitle">Analise. Decida. Conserve o Tempo.</p>
                 <div class="start-instructions">
-                    <p>Como curador sênior, seu dever é inspecionar relíquias em busca de anomalias temporais ou
-                        falsificações. Use suas ferramentas com sabedoria.</p>
+                    <p>Como curador desta galeria atemporal, você deve inspecionar cada item. <br> Procure por
+                        anacronismos eletrônicos, marcas místicas ou pesos inconsistentes.</p>
                 </div>
-                <button id="btn-start-game" class="primary-btn start-btn">Iniciar Turno</button>
+                <button id="btn-start-game" class="primary-btn start-btn">Abrir Galeria</button>
             </div>
         </div>
 
         <div id="game-canvas">
-            <!-- Three.js renders here -->
+            <!-- Three.js will be injected here -->
         </div>
 
         <div id="ui-overlay" class="hidden">
+            <!-- Tools Panel (Left) -->
             <aside id="panel-tools" class="glass-panel">
-                <div class="panel-header">Recursos de Inspeção</div>
+                <div class="panel-header">Equipamento</div>
                 <div class="tool-buttons">
-                    <button id="btn-loupe" class="tool-btn" title="Lupa de Precisão">
+                    <button id="btn-loupe" class="tool-btn" title="Lupa de Alta Resolução">
                         <span class="icon">🔍</span>
                         <span class="label">Lupa</span>
                     </button>
@@ -44,12 +49,14 @@
                         <span class="label">Balança</span>
                     </button>
                 </div>
+
                 <div class="instructions-panel">
                     <h3>Protocolo de Análise</h3>
-                    <p id="artifact-instruction">Carregando protocolo...</p>
+                    <p id="artifact-instruction">Iniciando análise do objeto...</p>
                 </div>
             </aside>
 
+            <!-- Inspection Corner Guides (Center) -->
             <main id="panel-inspection">
                 <div id="container-objeto">
                     <div class="inspection-guides">
@@ -61,13 +68,14 @@
                 </div>
             </main>
 
+            <!-- Verdict Panel (Right) -->
             <aside id="panel-decision" class="glass-panel">
                 <div class="ui-manual">
-                    <h2 id="artifact-name">Objeto</h2>
+                    <h2 id="artifact-name">Carregando...</h2>
                     <div id="decision-container">
-                        <p class="decision-text">Após sua inspeção, este objeto é:</p>
+                        <p class="decision-text">Após sua inspeção rigorosa, qual o seu veredito?</p>
                         <div class="decision-buttons">
-                            <button id="btn-normal" class="primary-btn decision-btn">Normal</button>
+                            <button id="btn-normal" class="primary-btn decision-btn">Legítimo</button>
                             <button id="btn-anomaly" class="primary-btn decision-btn anomaly">Anomalia</button>
                         </div>
                     </div>
@@ -75,24 +83,25 @@
             </aside>
         </div>
 
-        <!-- Feedback & Game Over Modals -->
+        <!-- Feedback UI -->
         <div id="feedback-modal" class="hidden screen-overlay">
             <div class="modal-content">
-                <h1 id="feedback-title">Relatório</h1>
+                <h1 id="feedback-title">Relatório de Turno</h1>
                 <p id="feedback-score"></p>
-                <button id="btn-next" class="primary-btn">Próximo Artefato</button>
+                <button id="btn-next" class="primary-btn">Próximo Item</button>
             </div>
         </div>
 
+        <!-- Game Over UI -->
         <div id="game-over-modal" class="hidden screen-overlay">
-            <div class="modal-content">
-                <h1 id="game-over-title">Fim de Turno</h1>
-                <p id="game-over-message">Um erro grave de curadoria foi cometido.</p>
+            <div class="modal-content failure">
+                <h1 id="game-over-title">Turno Encerrado</h1>
+                <p id="game-over-message">Um erro de curadoria foi cometido. O museu não perdoa falhas.</p>
                 <button id="btn-restart" class="primary-btn">Tentar Novamente</button>
             </div>
         </div>
 
-        <!-- Screen Flash for Balance -->
+        <!-- Tool Feedback Banner -->
         <div id="screen-info" class="hidden"></div>
     </div>
 
