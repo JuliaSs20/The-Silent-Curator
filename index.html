@@ -4,12 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
     <title>The Silent Curator</title>
+=======
+    <title>The Silent Curator | Antigravity Engine</title>
+    <!-- Substituído para estilo retro de máquina de escrever -->
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Special+Elite&display=swap" rel="stylesheet">
+>>>>>>> 8a5de6750ed1c7eb85aa04fca0b98feb6b68dfa6
     <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
     <div id="app">
+<<<<<<< HEAD
         <div id="game-canvas">
             <!-- Three.js will render here -->
         </div>
@@ -55,18 +62,97 @@
                             <button id="btn-anomaly" class="primary-btn decision-btn anomaly">Anomalia</button>
                         </div>
                     </div>
+=======
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen-overlay active">
+            <div class="start-content">
+                <h1>The Silent Curator</h1>
+                <p>Analise. Identifique. Sobreviva.</p>
+                <button id="btn-start" class="primary-btn">Iniciar Turno</button>
+            </div>
+        </div>
+
+        <div id="game-canvas">
+            <!-- Three.js renders here -->
+        </div>
+
+        <div id="ui-overlay" class="hidden-ui">
+            <aside id="panel-tools" class="desk-panel">
+                <div class="panel-header">GAVETA DE INSPEÇÃO</div>
+                <div class="tool-buttons">
+                    <button id="btn-loupe" class="tool-btn" title="Lupa de Alta Precisão">
+                        <span class="icon">🔍</span>
+                        <div class="label-group">
+                            <span class="label">Lupa</span>
+                        </div>
+                    </button>
+                    <button id="btn-uv" class="tool-btn" title="Luz Ultravioleta">
+                        <span class="icon">🔦</span>
+                        <div class="label-group">
+                            <span class="label">Luz UV</span>
+                        </div>
+                    </button>
+                    <button id="btn-scale" class="tool-btn" title="Balança de Precisão">
+                        <span class="icon">⚖️</span>
+                        <div class="label-group">
+                            <span class="label">Balança</span>
+                        </div>
+                    </button>
+                    <button id="btn-manual" class="tool-btn" title="Manual de Jogatina">
+                        <span class="icon">📖</span>
+                        <div class="label-group">
+                            <span class="label">Manual</span>
+                        </div>
+                    </button>
+                </div>
+            </aside>
+
+            <aside id="panel-decision" class="paper-panel">
+                <div class="ui-manual paper-texture">
+                    <h2>VEREDITO OFICIAL</h2>
+                    <div id="checklist-container">
+                        <label class="check-item">
+                            <input type="checkbox" id="check-anacronismo">
+                            Anacronismo Detectado
+                        </label>
+                        <label class="check-item">
+                            <input type="checkbox" id="check-mistico">
+                            Propriedade Anômala
+                        </label>
+                        <label class="check-item">
+                            <input type="checkbox" id="check-falso">
+                            Falsificação Técnica
+                        </label>
+                    </div>
+                    <button id="btn-finalizar" class="primary-btn">Selar Documento</button>
+>>>>>>> 8a5de6750ed1c7eb85aa04fca0b98feb6b68dfa6
                 </div>
             </aside>
         </div>
 
+<<<<<<< HEAD
         <div id="feedback-modal" class="hidden">
             <div class="modal-content">
                 <h1 id="feedback-title">Veredito</h1>
+=======
+        <!-- Manual Modal -->
+        <div id="manual-modal" class="hidden screen-overlay">
+            <div class="manual-content paper-texture">
+                <button id="btn-close-manual" class="close-btn">[X]</button>
+                <img src="./assets/manual.png" alt="Manual de Jogatina" class="manual-image">
+            </div>
+        </div>
+
+        <div id="feedback-modal" class="hidden screen-overlay">
+            <div class="modal-content">
+                <h1 id="feedback-title">RELATÓRIO</h1>
+>>>>>>> 8a5de6750ed1c7eb85aa04fca0b98feb6b68dfa6
                 <p id="feedback-score"></p>
                 <button id="btn-next" class="primary-btn">Próximo Artefato</button>
             </div>
         </div>
 
+<<<<<<< HEAD
         <div id="game-over-modal" class="hidden">
             <div class="modal-content">
                 <h1 id="game-over-title">Fim de Jogo</h1>
@@ -76,6 +162,12 @@
         </div>
     </div>
     <script type="module" src="./main.js"></script>
+=======
+        <!-- Physical Stamp Overlay -->
+        <div id="stamp-mark" class="stamp-reveal">APROVADO</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="./main.js"></script>
+>>>>>>> 8a5de6750ed1c7eb85aa04fca0b98feb6b68dfa6
 </body>
 
 </html>

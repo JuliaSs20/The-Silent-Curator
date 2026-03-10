@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Inter:wght@300;400;500&display=swap');
 
 :root {
+<<<<<<< HEAD
     --bg-color: #0c0c0e;
     --panel-bg: rgba(20, 20, 25, 0.85);
     --accent-color: #c4a484;
@@ -8,6 +9,14 @@
     --text-color: #e0e0e0;
     --border-glow: rgba(196, 164, 132, 0.3);
     --glass-border: rgba(255, 255, 255, 0.1);
+=======
+    --bg-color: #1a1a1a;
+    --paper-bg: #e3d5ba; /* Cor de papel velho */
+    --paper-dark: #ccbc9d;
+    --ink-color: #1a1b1c; /* Tinta preta/caneta */
+    --stamp-red: #b22222;
+    --desk-color: #3e2723;
+>>>>>>> 8a5de6750ed1c7eb85aa04fca0b98feb6b68dfa6
 }
 
 * {
@@ -17,6 +26,7 @@
 }
 
 body {
+<<<<<<< HEAD
     font-family: 'Inter', sans-serif;
     background: #000;
     color: var(--text-color);
@@ -32,14 +42,26 @@ h2 {
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 2px;
+=======
+    font-family: 'Courier Prime', monospace;
+    background-color: var(--bg-color);
+    color: var(--ink-color);
+    height: 100vh;
+    overflow: hidden;
+    cursor: crosshair;
+>>>>>>> 8a5de6750ed1c7eb85aa04fca0b98feb6b68dfa6
 }
 
 #app {
-    display: flex;
     width: 100vw;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
     position: relative;
+<<<<<<< HEAD
     background: radial-gradient(circle at center, #1a1a20 0%, #000 100%);
+=======
+>>>>>>> 8a5de6750ed1c7eb85aa04fca0b98feb6b68dfa6
 }
 
 #game-canvas {
@@ -48,19 +70,28 @@ h2 {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1;
+    z-index: 0;
 }
 
+/* UI Overlay */
 #ui-overlay {
     position: relative;
     z-index: 10;
+<<<<<<< HEAD
     display: grid;
     grid-template-columns: 300px 1fr 350px;
     width: 100%;
+=======
+    display: flex;
+    justify-content: space-between;
+>>>>>>> 8a5de6750ed1c7eb85aa04fca0b98feb6b68dfa6
     height: 100%;
+    width: 100%;
+    padding: 2rem;
     pointer-events: none;
 }
 
+<<<<<<< HEAD
 .glass-panel {
     background: var(--panel-bg);
     backdrop-filter: blur(20px);
@@ -72,25 +103,70 @@ h2 {
     box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
 }
 
+=======
+/* Nova estética de mesa/escritório retro */
+.paper-panel {
+    align-self: flex-end;
+    margin-bottom: 0px;
+    margin-right: -20px;
+    pointer-events: auto;
+    transform: rotate(-1deg);
+    transition: transform 0.3s;
+}
+
+.paper-panel:hover {
+    transform: rotate(0deg) translateY(-5px);
+}
+
+.paper-texture {
+    background-color: var(--paper-bg);
+    background-image: 
+        linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    border: 2px solid var(--paper-dark);
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.5), inset 0 0 40px rgba(100,80,50,0.2);
+    padding: 2.5rem;
+    color: var(--ink-color);
+    border-radius: 2px;
+}
+
+.desk-panel {
+    background-color: #2b2b2b;
+    border: 3px solid #1a1a1a;
+    border-radius: 4px;
+    padding: 1.5rem;
+    pointer-events: auto;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 5px 5px 15px rgba(0,0,0,0.5);
+}
+
+/* Left Tools Panel */
+>>>>>>> 8a5de6750ed1c7eb85aa04fca0b98feb6b68dfa6
 #panel-tools {
-    border-right: 1px solid var(--border-glow);
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-self: flex-start;
 }
 
 .panel-header {
-    font-family: 'Crimson Pro', serif;
-    font-size: 1.2rem;
-    color: var(--accent-color);
-    margin-bottom: 2rem;
-    border-bottom: 1px solid var(--border-glow);
-    padding-bottom: 0.5rem;
+    font-family: 'Special Elite', cursive;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #a0a0a0;
     text-transform: uppercase;
-    letter-spacing: 3px;
+    text-align: center;
+    border-bottom: 2px dashed #444;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
 }
 
 .tool-buttons {
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
+<<<<<<< HEAD
     margin-bottom: 3rem;
 }
 
@@ -100,10 +176,21 @@ h2 {
     color: var(--text-color);
     padding: 1rem;
     border-radius: 8px;
+=======
+}
+
+.tool-btn {
+    background: #1e1e1e;
+    border: 2px solid #000;
+    color: #e0e0e0;
+    padding: 1rem;
+    border-radius: 3px;
+>>>>>>> 8a5de6750ed1c7eb85aa04fca0b98feb6b68dfa6
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 1rem;
+<<<<<<< HEAD
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -140,16 +227,37 @@ h2 {
     line-height: 1.5;
     color: #ccc;
     font-style: italic;
+=======
+    transition: all 0.1s;
+    box-shadow: 2px 2px 0px #000;
 }
 
-/* Inspection Area */
-#panel-inspection {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+.tool-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0px #000;
+    background: #2a2a2a;
 }
 
+.tool-btn:active, .tool-btn.active {
+    transform: translate(1px, 1px);
+    box-shadow: 0px 0px 0px #000;
+    background: #444;
+    color: #fff;
+}
+
+.tool-btn .icon {
+    font-size: 1.4rem;
+>>>>>>> 8a5de6750ed1c7eb85aa04fca0b98feb6b68dfa6
+}
+
+.tool-btn .label {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+<<<<<<< HEAD
 #container-objeto {
     width: 90%;
     height: 80%;
@@ -259,13 +367,88 @@ h2 {
     padding: 1.2rem;
     font-family: 'Crimson Pro', serif;
     font-weight: 700;
+=======
+/* Right Decision Panel */
+#panel-decision {
+    width: 380px;
+    height: auto;
+}
+
+.ui-manual {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.ui-manual h2 {
+    font-family: 'Special Elite', cursive;
+    font-size: 1.8rem;
+    color: var(--ink-color);
+    text-decoration: underline;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+#checklist-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    padding: 1rem 0;
+    border-top: 1px dashed var(--ink-color);
+    border-bottom: 1px dashed var(--ink-color);
+}
+
+.check-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--ink-color);
+}
+
+.check-item input {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--ink-color);
+    border-radius: 2px;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+}
+
+.check-item input:checked::after {
+    content: 'X';
+    font-family: 'Special Elite', cursive;
+    font-size: 24px;
+    color: var(--ink-color);
+    position: absolute;
+    top: -8px;
+    left: 1px;
+}
+
+.primary-btn {
+    background: transparent;
+    border: 2px solid var(--ink-color);
+    color: var(--ink-color);
+    padding: 0.8rem;
+    font-family: 'Special Elite', cursive;
+    font-weight: bold;
+    font-size: 1.2rem;
+>>>>>>> 8a5de6750ed1c7eb85aa04fca0b98feb6b68dfa6
     text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.3s ease;
-    border-radius: 4px;
+    border-radius: 2px;
+    transition: all 0.1s;
+    margin-top: 1rem;
+    box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
 }
 
 .primary-btn:hover {
+<<<<<<< HEAD
     background: #d4b494;
     transform: translateY(-2px);
     box-shadow: 0 5px 20px rgba(196, 164, 132, 0.3);
@@ -320,10 +503,216 @@ h2 {
     margin-bottom: 3rem;
     color: #bbb;
     line-height: 1.6;
+=======
+    background: var(--ink-color);
+    color: var(--paper-bg);
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+}
+
+.primary-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0px 0px 0px rgba(0,0,0,0.3);
+}
+
+/* Feedback Modal */
+#feedback-modal {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+    background: var(--paper-bg);
+    padding: 3rem;
+    border: 2px solid var(--ink-color);
+    border-radius: 2px;
+    text-align: center;
+    max-width: 500px;
+    box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.5);
+    background-image: 
+        linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    transform: rotate(1deg);
+}
+
+#feedback-title {
+    font-family: 'Special Elite', cursive;
+    font-size: 3rem;
+    color: var(--ink-color);
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--ink-color);
+    padding-bottom: 0.5rem;
+}
+
+#feedback-score {
+    font-family: 'Courier Prime', monospace;
+    font-size: 1.2rem;
+    color: var(--ink-color);
+    margin-bottom: 2rem;
+    font-weight: bold;
+>>>>>>> 8a5de6750ed1c7eb85aa04fca0b98feb6b68dfa6
 }
 
 .hidden {
     opacity: 0;
     pointer-events: none;
+<<<<<<< HEAD
     display: none !important;
+=======
+}
+
+/* Stamp Animation */
+.stamp-reveal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    color: var(--stamp-red);
+    border: 6px double var(--stamp-red);
+    padding: 1rem 2rem;
+    font-family: 'Special Elite', cursive;
+    font-size: 4rem;
+    font-weight: 900;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2000;
+    text-transform: uppercase;
+    background: transparent;
+    text-shadow: 1px 1px 2px rgba(178, 34, 34, 0.5);
+    mix-blend-mode: multiply;
+}
+
+.animate-stamp {
+    animation: stamp-hit 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes stamp-hit {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(-15deg) scale(4);
+    }
+    100% {
+        opacity: 0.8;
+        transform: translate(-50%, -50%) rotate(-15deg) scale(1);
+    }
+}
+
+@keyframes fadeOut {
+    0% { opacity: 0; transform: translate(-50%, -40%); }
+    20% { opacity: 1; transform: translate(-50%, -50%); }
+    80% { opacity: 1; transform: translate(-50%, -50%); }
+    100% { opacity: 0; transform: translate(-50%, -60%); }
+}
+
+/* Start Screen & Modals */
+.screen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(5, 5, 7, 0.95);
+    backdrop-filter: blur(15px);
+    z-index: 5000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease;
+}
+
+#start-screen {
+    background: url('/assets/tela_inicial.png') center/cover no-repeat;
+    background-color: var(--bg-color); /* fallback */
+    background-blend-mode: multiply;
+}
+
+.screen-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.hidden-ui {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s ease;
+}
+
+.start-content {
+    text-align: center;
+    padding: 3rem;
+    max-width: 600px;
+}
+
+.start-content h1 {
+    font-family: 'Special Elite', cursive;
+    font-size: 4rem;
+    color: #fff;
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 4px 4px 0px #000;
+}
+
+.start-content p {
+    font-family: 'Courier Prime', monospace;
+    font-size: 1.2rem;
+    color: #ccc;
+    margin-bottom: 3rem;
+    letter-spacing: 1px;
+    font-weight: bold;
+    background: #000;
+    display: inline-block;
+    padding: 5px 10px;
+}
+
+.start-content .primary-btn {
+    background: #fff;
+    color: #000;
+    border: none;
+    font-size: 1.5rem;
+    padding: 1rem 3rem;
+}
+
+.start-content .primary-btn:hover {
+    background: #ccc;
+    color: #000;
+}
+
+/* Manual */
+.manual-content {
+    position: relative;
+    max-width: 80%;
+    max-height: 90vh;
+    padding: 1rem;
+    box-shadow: 10px 10px 30px rgba(0,0,0,0.8);
+}
+
+.manual-image {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    mix-blend-mode: multiply; /* Make it look printed on the paper */
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: transparent;
+    color: var(--ink-color);
+    border: none;
+    font-family: 'Special Elite', cursive;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 5010;
+    transition: transform 0.1s;
+}
+
+.close-btn:hover {
+    transform: scale(1.2);
+    color: #000;
+>>>>>>> 8a5de6750ed1c7eb85aa04fca0b98feb6b68dfa6
 }
