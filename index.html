@@ -4,81 +4,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Silent Curator</title>
-  <script type="module" crossorigin src="/assets/index-qfoC_BW2.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-CjPl0n1q.css">
+    <title>The Silent Curator | Antigravity Engine</title>
 </head>
 
 <body>
     <div id="app">
         <div id="game-canvas">
-            <!-- Three.js will render here -->
+            <!-- Three.js renders here -->
         </div>
 
         <div id="ui-overlay">
             <aside id="panel-tools" class="glass-panel">
-                <div class="panel-header">Ferramentas</div>
+                <div class="panel-header">Instrumentos</div>
                 <div class="tool-buttons">
-                    <button id="btn-loupe" class="tool-btn" title="Lupa">
+                    <button id="btn-loupe" class="tool-btn" title="Lupa de Alta Precisão">
                         <span class="icon">🔍</span>
-                        <span class="label">Lupa</span>
+                        <div class="label-group">
+                            <span class="label">Lupa</span>
+                        </div>
                     </button>
-                    <button id="btn-uv" class="tool-btn" title="Luz UV">
+                    <button id="btn-uv" class="tool-btn" title="Luz Ultravioleta">
                         <span class="icon">🔦</span>
-                        <span class="label">Luz UV</span>
+                        <div class="label-group">
+                            <span class="label">Luz UV</span>
+                        </div>
                     </button>
-                    <div id="stamp-drag" class="tool-btn stamp" draggable="true">
-                        <span class="icon">🧧</span>
-                        <span class="label">Carimbo</span>
-                    </div>
+                    <button id="btn-scale" class="tool-btn" title="Balança de Precisão">
+                        <span class="icon">⚖️</span>
+                        <div class="label-group">
+                            <span class="label">Balança</span>
+                        </div>
+                    </button>
                 </div>
             </aside>
 
-            <main id="panel-inspection">
-                <div id="container-objeto">
-                    <!-- 3D Object Render Area -->
-                    <div class="inspection-guides">
-                        <div class="guide-corner tl"></div>
-                        <div class="guide-corner tr"></div>
-                        <div class="guide-corner bl"></div>
-                        <div class="guide-corner br"></div>
-                    </div>
-                </div>
-            </main>
-
             <aside id="panel-decision" class="glass-panel">
                 <div class="ui-manual">
-                    <h2>Manual de Curadoria</h2>
+                    <h2>Veredito</h2>
                     <div id="checklist-container">
                         <label class="check-item">
                             <input type="checkbox" id="check-anacronismo">
-                            <span class="checkmark"></span>
-                            Anacronismo (Ex: Fones, QR Code)
+                            Anacronismo Detectado
                         </label>
                         <label class="check-item">
                             <input type="checkbox" id="check-mistico">
-                            <span class="checkmark"></span>
-                            Propriedades Místicas (Pisca/Move)
+                            Propriedade Anômala
                         </label>
                         <label class="check-item">
                             <input type="checkbox" id="check-falso">
-                            <span class="checkmark"></span>
-                            Falsificação (Assinatura/Material)
+                            Falsificação Técnica
                         </label>
                     </div>
-                    <button id="btn-finalizar" class="primary-btn">Enviar Veredito</button>
+                    <button id="btn-finalizar" class="primary-btn">Selar Documento</button>
                 </div>
             </aside>
         </div>
 
         <div id="feedback-modal" class="hidden">
             <div class="modal-content">
-                <h1 id="feedback-title">Veredito</h1>
+                <h1 id="feedback-title">RELATÓRIO</h1>
                 <p id="feedback-score"></p>
                 <button id="btn-next" class="primary-btn">Próximo Artefato</button>
             </div>
         </div>
-    </div>
+
+        <!-- Physical Stamp Overlay -->
+        <div id="stamp-mark" class="stamp-reveal">AUTÊNTICO</div>
+    </div>
+    
+    <script type="module" src="/main.js"></script>
 </body>
 
 </html>

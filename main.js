@@ -1,244 +1,343 @@
 import * as THREE from 'three';
 
 // --- CONFIGURATION & DATA ---
-const artifacts = [
+const artifactsConfig = [
     {
-        name: "Vaso Dinastia Ming",
-        isAnachronistic: false,
+        id: "vaso",
+        name: "O Vaso Grego",
+        type: "3d",
+        texture: "/assets/vaso grego.png",
+        anomalies: ["codigo_barras", "assinatura_errada", "guerreiro_cansado"],
+        ambientSound: "mar_suave",
+        isAnachronistic: true,
         isMystical: false,
-        isFake: true, // Assinatura borrada
-        description: "Um vaso azul e branco. A porcelana parece autêntica, mas a marca na base parece... moderna.",
-        color: 0x34495e,
-        shape: 'torusKnot'
+        isFake: true,
+        baseColor: 0x8b4513
     },
     {
+        id: "retrato",
+        name: "Retrato de uma Nobre",
+        type: "2d",
+        texture: "/assets/quadro nobre.jpg",
+        anomalies: ["zipper_invisivel", "reflexo_impossivel", "olhar_seguidor", "sorriso"],
+        isAnachronistic: true,
+        isMystical: true,
+        isFake: false,
+        baseColor: 0x4a3728
+    },
+    {
+        id: "relogio",
         name: "Relógio de Bolso Vitoriano",
-        isAnachronistic: true, // Tem um microchip dentro se olhar com a lupa
-        isMystical: false,
+        type: "3d",
+        texture: "/assets/relogio antigo.webp",
+        anomalies: ["numero_iiii", "pilha_moderna", "tempo_reverso", "temperatura_fria"],
+        isAnachronistic: true,
+        isMystical: true,
         isFake: false,
-        description: "Um relógio ornamentado. O tique-tique é hipnotizante.",
-        color: 0x95a5a6,
-        shape: 'cylinder'
-    },
-    {
-        name: "Estatueta de Jade",
-        isAnachronistic: false,
-        isMystical: true, // Pulsa luz quando a luz UV está ligada
-        isFake: false,
-        description: "Uma pequena estátua de jade. Dizem que ela sussurra à noite.",
-        color: 0x27ae60,
-        shape: 'octahedron'
+        baseColor: 0xd4af37
     }
 ];
 
 let currentLevel = 0;
 let score = 0;
+let scene, camera, renderer, artifactGroup, currentMesh;
+let isDragging = false;
+let previousMousePosition = { x: 0, y: 0 };
+let loupeActive = false;
+let uvActive = false;
+let lastRotationTime = 0;
+let anomalyTriggered = false;
 
-// --- THREE.JS SETUP ---
-const container = document.getElementById('game-canvas');
-const renderContainer = document.getElementById('container-objeto');
+// --- INITIALIZATION ---
+function init() {
+    const container = document.getElementById('game-canvas');
+    
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x050507);
+    scene.fog = new THREE.Fog(0x050507, 2, 10);
 
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0c0c0e);
-scene.fog = new THREE.Fog(0x0c0c0e, 5, 15);
+    camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 0, 5);
 
-const camera = new THREE.PerspectiveCamera(45, renderContainer.clientWidth / renderContainer.clientHeight, 0.1, 1000);
-camera.position.z = 5;
+    renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
+    container.appendChild(renderer.domElement);
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(renderContainer.clientWidth, renderContainer.clientHeight);
-renderContainer.appendChild(renderer.domElement);
+    // Lights
+    const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+    scene.add(ambientLight);
 
-// Lighting
-const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
-scene.add(ambientLight);
+    const mainLight = new THREE.SpotLight(0xffffff, 20);
+    mainLight.position.set(2, 5, 5);
+    mainLight.castShadow = true;
+    mainLight.angle = Math.PI / 8;
+    mainLight.penumbra = 0.3;
+    mainLight.decay = 2;
+    scene.add(mainLight);
 
-const spotLight = new THREE.SpotLight(0xffffff, 10);
-spotLight.position.set(0, 5, 5);
-spotLight.angle = Math.PI / 6;
-spotLight.penumbra = 0.5;
-spotLight.decay = 2;
-spotLight.distance = 20;
-scene.add(spotLight);
+    artifactGroup = new THREE.Group();
+    scene.add(artifactGroup);
 
-// Artifact Group
-const artifactGroup = new THREE.Group();
-scene.add(artifactGroup);
+    loadLevel(0);
+    animate();
+    setupEvents();
+}
 
-let currentMesh = null;
-
-function loadArtifact(index) {
-    const data = artifacts[index];
+function loadLevel(index) {
+    const config = artifactsConfig[index];
     artifactGroup.clear();
+    anomalyTriggered = false;
 
-    let geometry;
-    switch (data.shape) {
-        case 'torusKnot': geometry = new THREE.TorusKnotGeometry(1, 0.3, 100, 16); break;
-        case 'cylinder': geometry = new THREE.CylinderGeometry(1, 1, 0.2, 32); break;
-        case 'octahedron': geometry = new THREE.OctahedronGeometry(1.2); break;
-        default: geometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
-    }
-
-    const material = new THREE.MeshStandardMaterial({
-        color: data.color,
-        metalness: 0.7,
-        roughness: 0.2,
-        emissive: 0x000000
-    });
-
-    currentMesh = new THREE.Mesh(geometry, material);
-    artifactGroup.add(currentMesh);
-
-    // Reset rotation
-    artifactGroup.rotation.set(0, 0, 0);
-
-    // Update UI
-    document.querySelector('.ui-manual h2').innerText = data.name;
+    // Reset UI
+    document.querySelector('.ui-manual h2').innerText = config.name;
     document.getElementById('check-anacronismo').checked = false;
     document.getElementById('check-mistico').checked = false;
     document.getElementById('check-falso').checked = false;
-}
 
-// --- SMOOTH ROTATION LOGIC ---
-let isDragging = false;
-let previousMousePosition = { x: 0, y: 0 };
-const rotationSpeed = 0.005;
+    const textureLoader = new THREE.TextureLoader();
+    const texture = textureLoader.load(config.texture);
 
-renderContainer.addEventListener('mousedown', (e) => {
-    isDragging = true;
-});
-
-window.addEventListener('mouseup', () => {
-    isDragging = false;
-});
-
-window.addEventListener('mousemove', (e) => {
-    if (isDragging && currentMesh) {
-        const deltaX = e.clientX - previousMousePosition.x;
-        const deltaY = e.clientY - previousMousePosition.y;
-
-        artifactGroup.rotation.y += deltaX * rotationSpeed;
-        artifactGroup.rotation.x += deltaY * rotationSpeed;
-    }
-    previousMousePosition = { x: e.clientX, y: e.clientY };
-});
-
-// --- TOOLS LOGIC ---
-const btnLoupe = document.getElementById('btn-loupe');
-const btnUV = document.getElementById('btn-uv');
-
-let loupeActive = false;
-let uvActive = false;
-
-btnLoupe.addEventListener('click', () => {
-    loupeActive = !loupeActive;
-    btnLoupe.classList.toggle('active', loupeActive);
-
-    // Smooth Zoom
-    const targetZ = loupeActive ? 3 : 5;
-    const startZ = camera.position.z;
-    const duration = 500;
-    const startTime = performance.now();
-
-    function animateZoom(time) {
-        const elapsed = time - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const ease = 1 - Math.pow(1 - progress, 3); // easeOutCubic
-        camera.position.z = startZ + (targetZ - startZ) * ease;
-        if (progress < 1) requestAnimationFrame(animateZoom);
-    }
-    requestAnimationFrame(animateZoom);
-});
-
-btnUV.addEventListener('click', () => {
-    uvActive = !uvActive;
-    btnUV.classList.toggle('active', uvActive);
-
-    const artifact = artifacts[currentLevel];
-    if (uvActive) {
-        scene.background = new THREE.Color(0x050010); // Deep purple/blue
-        spotLight.color.set(0x8800ff);
-        spotLight.intensity = 20;
-
-        if (artifact.isMystical) {
-            currentMesh.material.emissive.set(0x00ffcc);
-            currentMesh.material.emissiveIntensity = 4.0;
+    let geometry;
+    if (config.type === "3d") {
+        if (config.id === "vaso") {
+            // Lathe Geometry for Vase
+            const points = [];
+            for (let i = 0; i < 10; i++) {
+                points.push(new THREE.Vector2(Math.sin(i * 0.2) * 1 + 0.5, (i - 5) * 0.4));
+            }
+            geometry = new THREE.LatheGeometry(points, 32);
+        } else {
+            geometry = new THREE.CylinderGeometry(1, 1, 0.2, 32);
         }
     } else {
-        scene.background = new THREE.Color(0x0c0c0e);
-        spotLight.color.set(0xffffff);
-        spotLight.intensity = 10;
-        currentMesh.material.emissive.set(0x000000);
+        // Painting
+        geometry = new THREE.BoxGeometry(2.5, 3.5, 0.1);
     }
-});
 
-// --- CHECKLIST & VERDICT ---
-const btnFinalizar = document.getElementById('btn-finalizar');
-const modal = document.getElementById('feedback-modal');
-const feedbackTitle = document.getElementById('feedback-title');
-const feedbackScore = document.getElementById('feedback-score');
-const btnNext = document.getElementById('btn-next');
-const manualContent = document.querySelector('.ui-manual');
+    const material = new THREE.MeshStandardMaterial({
+        map: texture,
+        roughness: 0.4,
+        metalness: 0.1
+    });
 
-btnFinalizar.addEventListener('click', () => {
-    // Stamp Animation
-    const stamp = document.createElement('div');
-    stamp.className = 'stamp-reveal';
-    stamp.innerText = 'VERIFICADO';
-    manualContent.appendChild(stamp);
+    currentMesh = new THREE.Mesh(geometry, material);
+    currentMesh.castShadow = true;
+    currentMesh.receiveShadow = true;
+    artifactGroup.add(currentMesh);
+
+    // Special Eyes for Portrait
+    if (config.id === "retrato") {
+        const eyeGeom = new THREE.SphereGeometry(0.05, 16, 16);
+        const eyeMat = new THREE.MeshBasicMaterial({ color: 0x000000 });
+        const eyeLeft = new THREE.Mesh(eyeGeom, eyeMat);
+        const eyeRight = new THREE.Mesh(eyeGeom, eyeMat);
+        eyeLeft.position.set(-0.2, 0.8, 0.06);
+        eyeRight.position.set(0.2, 0.8, 0.06);
+        eyeLeft.name = "eye_l";
+        eyeRight.name = "eye_r";
+        currentMesh.add(eyeLeft, eyeRight);
+    }
+
+    artifactGroup.rotation.set(0, 0, 0);
+}
+
+// --- CONTROLS ---
+function setupEvents() {
+    window.addEventListener('mousedown', (e) => {
+        if (e.target.tagName === 'CANVAS') isDragging = true;
+    });
+
+    window.addEventListener('mouseup', () => {
+        isDragging = false;
+        lastRotationTime = performance.now();
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            const deltaX = e.clientX - previousMousePosition.x;
+            const deltaY = e.clientY - previousMousePosition.y;
+
+            artifactGroup.rotation.y += deltaX * 0.005;
+            artifactGroup.rotation.x += deltaY * 0.005;
+        }
+
+        // Look-at Anomaly (Eyes)
+        if (currentLevel === 1) { // Portrait
+            const eyeL = currentMesh.getObjectByName("eye_l");
+            const eyeR = currentMesh.getObjectByName("eye_r");
+            if (eyeL && eyeR) {
+                const mx = (e.clientX / window.innerWidth) * 2 - 1;
+                const my = -(e.clientY / window.innerHeight) * 2 + 1;
+                eyeL.position.x = -0.2 + mx * 0.01;
+                eyeL.position.y = 0.8 + my * 0.01;
+                eyeR.position.x = 0.2 + mx * 0.01;
+                eyeR.position.y = 0.8 + my * 0.01;
+            }
+        }
+
+        previousMousePosition = { x: e.clientX, y: e.clientY };
+    });
+
+    // Tools
+    document.getElementById('btn-loupe').addEventListener('click', toggleLoupe);
+    document.getElementById('btn-uv').addEventListener('click', toggleUV);
+    document.getElementById('btn-scale').addEventListener('click', toggleScale);
+    document.getElementById('btn-finalizar').addEventListener('click', finishLevel);
+}
+
+function toggleScale() {
+    const btn = document.getElementById('btn-scale');
+    const config = artifactsConfig[currentLevel];
+    
+    // Simulate scale interaction
+    btn.classList.add('active');
+    setTimeout(() => {
+        btn.classList.remove('active');
+        const discrepancy = config.isFake ? "8.4g" : "0.0g";
+        // Create a temporary floating UI text instead of alert for better aesthetics
+        showFloatingText(`Balança: Discrepância ${discrepancy}`);
+    }, 800);
+}
+
+function showFloatingText(text) {
+    const div = document.createElement('div');
+    div.style.position = 'fixed';
+    div.style.top = '50%';
+    div.style.left = '50%';
+    div.style.transform = 'translate(-50%, -50%)';
+    div.style.padding = '1rem 2rem';
+    div.style.background = 'rgba(0,0,0,0.8)';
+    div.style.color = '#d4af37';
+    div.style.border = '1px solid #d4af37';
+    div.style.borderRadius = '8px';
+    div.style.fontFamily = 'Crimson Pro, serif';
+    div.style.zIndex = '3000';
+    div.style.pointerEvents = 'none';
+    div.style.animation = 'fadeOut 2s forwards';
+    div.innerText = text;
+    document.body.appendChild(div);
+    setTimeout(() => div.remove(), 2000);
+}
+
+function toggleLoupe() {
+    loupeActive = !loupeActive;
+    document.getElementById('btn-loupe').classList.toggle('active', loupeActive);
+    
+    const targetZ = loupeActive ? 2.5 : 5;
+    new TWEEN.Tween(camera.position)
+        .to({ z: targetZ }, 500)
+        .easing(TWEEN.Easing.Cubic.Out)
+        .start();
+}
+
+function toggleUV() {
+    uvActive = !uvActive;
+    document.getElementById('btn-uv').classList.toggle('active', uvActive);
+    
+    if (uvActive) {
+        scene.background.set(0x020010);
+        scene.fog.color.set(0x020010);
+    } else {
+        scene.background.set(0x050507);
+        scene.fog.color.set(0x050507);
+    }
+}
+
+function finishLevel() {
+    const stamp = document.getElementById('stamp-mark');
+    stamp.classList.remove('animate-stamp');
+    void stamp.offsetWidth; // trigger reflow
+    stamp.classList.add('animate-stamp');
 
     setTimeout(() => {
-        const artifact = artifacts[currentLevel];
-        const checkAna = document.getElementById('check-anacronismo').checked;
-        const checkMis = document.getElementById('check-mistico').checked;
-        const checkFal = document.getElementById('check-falso').checked;
+        const config = artifactsConfig[currentLevel];
+        const cAna = document.getElementById('check-anacronismo').checked;
+        const cMis = document.getElementById('check-mistico').checked;
+        const cFal = document.getElementById('check-falso').checked;
 
-        let precisionScore = 0;
-        if (checkAna === artifact.isAnachronistic) precisionScore += 10;
-        if (checkMis === artifact.isMystical) precisionScore += 10;
-        if (checkFal === artifact.isFake) precisionScore += 10;
+        let levelScore = 0;
+        if (cAna === config.isAnachronistic) levelScore += 10;
+        if (cMis === config.isMystical) levelScore += 10;
+        if (cFal === config.isFake) levelScore += 10;
+        
+        score += levelScore;
 
-        score += precisionScore;
+        document.getElementById('feedback-title').innerText = levelScore === 30 ? "EXCELENTE" : "INCOMPLETO";
+        document.getElementById('feedback-score').innerText = `Dedução: ${levelScore}/30. Cargo preservado.`;
+        document.getElementById('feedback-modal').classList.remove('hidden');
+    }, 600);
+}
 
-        feedbackTitle.innerText = precisionScore === 30 ? "Perfeito!" : precisionScore > 10 ? "Bom Trabalho" : "Falhou";
-        feedbackScore.innerText = `Você marcou ${precisionScore}/30 pontos neste artefato. Pontuação Total: ${score}`;
-
-        modal.classList.remove('hidden');
-        stamp.remove();
-    }, 1000);
-});
-
-btnNext.addEventListener('click', () => {
+document.getElementById('btn-next').addEventListener('click', () => {
     currentLevel++;
-    if (currentLevel >= artifacts.length) {
-        feedbackTitle.innerText = "Fim do Expediente";
-        feedbackScore.innerText = `Você completou sua curadoria. Pontuação Total Final: ${score}`;
-        btnNext.style.display = 'none';
+    if (currentLevel >= artifactsConfig.length) {
+        location.reload();
     } else {
-        loadArtifact(currentLevel);
-        modal.classList.add('hidden');
+        document.getElementById('feedback-modal').classList.add('hidden');
+        loadLevel(currentLevel);
     }
 });
 
-// --- ANIMATION RE-SIZE ---
-window.addEventListener('resize', () => {
-    const width = renderContainer.clientWidth;
-    const height = renderContainer.clientHeight;
-    renderer.setSize(width, height);
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-});
-
-// --- START ---
-loadArtifact(0);
-
+// --- ANIMATION LOOP ---
 function animate() {
     requestAnimationFrame(animate);
+    TWEEN.update();
 
     if (!isDragging && currentMesh) {
-        artifactGroup.rotation.y += 0.002; // Auto-rotation idle
+        artifactGroup.rotation.y += 0.001;
+        
+        // Idle Anomaly: Reverse Clock
+        if (currentLevel === 2) {
+             // Logic for hands would go here if we had separate meshes
+        }
+    }
+
+    // Vase Anomaly logic (Frame swap)
+    if (currentLevel === 0 && !isDragging && performance.now() - lastRotationTime < 100 && !anomalyTriggered) {
+        // Subtle texture flicker
+        currentMesh.material.emissive.set(0x110000);
+        setTimeout(() => currentMesh.material.emissive.set(0x000000), 16);
+        anomalyTriggered = true;
     }
 
     renderer.render(scene, camera);
 }
-animate();
+
+// Minimal Tween implementation for simple zooming if library not present
+const TWEEN = {
+    _tweens: [],
+    Tween: function(obj) {
+        this.target = obj;
+        this.to = function(props, duration) {
+            this.props = props;
+            this.duration = duration;
+            this.startTime = performance.now();
+            this.startProps = { ...obj };
+            TWEEN._tweens.push(this);
+            return this;
+        };
+        this.easing = function(fn) { this.ease = fn; return this; };
+        this.start = function() {};
+    },
+    Easing: { Cubic: { Out: (k) => 1 - Math.pow(1 - k, 3) } },
+    update: function() {
+        const now = performance.now();
+        TWEEN._tweens = TWEEN._tweens.filter(t => {
+            const elapsed = Math.min((now - t.startTime) / t.duration, 1);
+            const val = t.ease ? t.ease(elapsed) : elapsed;
+            for (let p in t.props) {
+                t.target[p] = t.startProps[p] + (t.props[p] - t.startProps[p]) * val;
+            }
+            return elapsed < 1;
+        });
+    }
+};
+
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+init();
