@@ -6,114 +6,199 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Silent Curator</title>
     <link rel="stylesheet" href="./style.css">
-    <!-- Google Fonts -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600;700&family=Inter:wght@300;400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
-            }
-        }
-    </script>
 </head>
 
 <body>
-    <div id="app">
-        <!-- Start Screen -->
-        <div id="start-screen" class="screen-overlay">
-            <div class="start-content">
-                <h1 class="title-main">The Silent Curator</h1>
-                <p class="subtitle">Analise. Decida. Conserve o Tempo.</p>
-                <div class="start-instructions">
-                    <p>Como curador desta galeria atemporal, você deve inspecionar cada item. <br> Procure por
-                        anacronismos eletrônicos, marcas místicas ou pesos inconsistentes.</p>
-                </div>
-                <button id="btn-start-game" class="primary-btn start-btn">Abrir Galeria</button>
+
+    <!-- ===== TELA INICIAL ===== -->
+    <div id="screen-start" class="screen active">
+        <div class="particles" id="particles"></div>
+        <div class="start-center">
+            <div class="logo-emblem">🏛️</div>
+            <h1 class="game-title">The Silent<br>Curator</h1>
+            <p class="game-tagline">Analise. Decida. Proteja a História.</p>
+            <div class="start-features">
+                <span>🔍 Ferramentas de Inspeção</span>
+                <span>🏷️ Leilões Misteriosos</span>
+                <span>🎒 Coleção Pessoal</span>
             </div>
+            <button class="btn-gold" onclick="startGame()">Abrir Galeria</button>
+            <p class="version-tag">v2.0 — Edição Completa</p>
         </div>
-
-        <div id="game-canvas">
-            <!-- Three.js will be injected here -->
-        </div>
-
-        <div id="ui-overlay" class="hidden">
-            <!-- Tools Panel (Left) -->
-            <aside id="panel-tools" class="glass-panel">
-                <div class="panel-header">Equipamento</div>
-                <div class="tool-buttons">
-                    <button id="btn-loupe" class="tool-btn" title="Lupa de Alta Resolução">
-                        <span class="icon">🔍</span>
-                        <span class="label">Lupa</span>
-                    </button>
-                    <button id="btn-uv" class="tool-btn" title="Luz Ultravioleta">
-                        <span class="icon">🔦</span>
-                        <span class="label">Luz UV</span>
-                    </button>
-                    <button id="btn-scale" class="tool-btn" title="Balança Analítica">
-                        <span class="icon">⚖️</span>
-                        <span class="label">Balança</span>
-                    </button>
-                </div>
-
-                <div class="instructions-panel">
-                    <h3>Protocolo de Análise</h3>
-                    <p id="artifact-instruction">Iniciando análise do objeto...</p>
-                </div>
-            </aside>
-
-            <!-- Inspection Corner Guides (Center) -->
-            <main id="panel-inspection">
-                <div id="container-objeto">
-                    <div class="inspection-guides">
-                        <div class="guide-corner tl"></div>
-                        <div class="guide-corner tr"></div>
-                        <div class="guide-corner bl"></div>
-                        <div class="guide-corner br"></div>
-                    </div>
-                </div>
-            </main>
-
-            <!-- Verdict Panel (Right) -->
-            <aside id="panel-decision" class="glass-panel">
-                <div class="ui-manual">
-                    <h2 id="artifact-name">Carregando...</h2>
-                    <div id="decision-container">
-                        <p class="decision-text">Após sua inspeção rigorosa, qual o seu veredito?</p>
-                        <div class="decision-buttons">
-                            <button id="btn-normal" class="primary-btn decision-btn">Legítimo</button>
-                            <button id="btn-anomaly" class="primary-btn decision-btn anomaly">Anomalia</button>
-                        </div>
-                    </div>
-                </div>
-            </aside>
-        </div>
-
-        <!-- Feedback UI -->
-        <div id="feedback-modal" class="hidden screen-overlay">
-            <div class="modal-content">
-                <h1 id="feedback-title">Relatório de Turno</h1>
-                <p id="feedback-score"></p>
-                <button id="btn-next" class="primary-btn">Próximo Item</button>
-            </div>
-        </div>
-
-        <!-- Game Over UI -->
-        <div id="game-over-modal" class="hidden screen-overlay">
-            <div class="modal-content failure">
-                <h1 id="game-over-title">Turno Encerrado</h1>
-                <p id="game-over-message">Um erro de curadoria foi cometido. O museu não perdoa falhas.</p>
-                <button id="btn-restart" class="primary-btn">Tentar Novamente</button>
-            </div>
-        </div>
-
-        <!-- Tool Feedback Banner -->
-        <div id="screen-info" class="hidden"></div>
     </div>
 
-    <!-- Scripts -->
-    <script type="module" src="./main.js"></script>
+    <!-- ===== TELA DE LEILÃO ===== -->
+    <div id="screen-auction" class="screen">
+        <div class="auction-bg"></div>
+        <div class="auction-container">
+            <div class="auction-header">
+                <span class="auction-badge">LEILÃO #<span id="auction-number">1</span></span>
+                <h2 id="auction-house">Casa de Leilões Sotheby's</h2>
+            </div>
+            <div class="auction-body">
+                <div class="auction-image-frame">
+                    <img id="auction-img" src="" alt="Objeto do leilão">
+                </div>
+                <div class="auction-info">
+                    <h3 id="auction-item-name">Nome do Objeto</h3>
+                    <p id="auction-origin" class="auction-origin">Origem desconhecida</p>
+                    <p id="auction-description" class="auction-desc">Descrição do item arrematado...</p>
+                    <div class="auction-price">
+                        <span class="price-label">Arrematado por:</span>
+                        <span class="price-value" id="auction-price">$12.500</span>
+                    </div>
+                    <button class="btn-gold" onclick="goToInspection()">Iniciar Inspeção →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TELA DE INSPEÇÃO (PRINCIPAL) ===== -->
+    <div id="screen-inspection" class="screen">
+        <!-- HUD Superior -->
+        <div class="hud-top">
+            <div class="hud-score">
+                <span class="hud-label">Pontuação</span>
+                <span class="hud-value" id="hud-score">0</span>
+            </div>
+            <div class="hud-coins">
+                <span class="hud-label">Moedas</span>
+                <span class="hud-value" id="hud-coins">💰 0</span>
+            </div>
+            <div class="hud-level">
+                <span class="hud-label">Item</span>
+                <span class="hud-value" id="hud-level">1 / 5</span>
+            </div>
+            <div class="hud-actions">
+                <button class="hud-btn" onclick="openBackpack()" title="Mochila">🎒</button>
+                <button class="hud-btn" onclick="openShop()" title="Loja">🏪</button>
+            </div>
+        </div>
+
+        <div class="inspection-layout">
+            <!-- Painel de Ferramentas (Esquerda) -->
+            <aside class="tools-panel glass-dark">
+                <h3 class="panel-title">Equipamento</h3>
+                <div class="tools-list">
+                    <button id="tool-loupe" class="tool-btn" onclick="toggleLoupe()">
+                        <span class="tool-icon">🔍</span>
+                        <span class="tool-name">Lupa</span>
+                        <span class="tool-level" id="loupe-level">Nv.1</span>
+                    </button>
+                    <button id="tool-uv" class="tool-btn" onclick="toggleUV()">
+                        <span class="tool-icon">🔦</span>
+                        <span class="tool-name">Luz UV</span>
+                        <span class="tool-level" id="uv-level">Nv.1</span>
+                    </button>
+                    <button id="tool-scale" class="tool-btn" onclick="useScale()">
+                        <span class="tool-icon">⚖️</span>
+                        <span class="tool-name">Balança</span>
+                        <span class="tool-level" id="scale-level">Nv.1</span>
+                    </button>
+                </div>
+
+                <!-- Manual na mesa de trabalho -->
+                <div class="manual-section">
+                    <h3 class="panel-title">📖 Manual de Análise</h3>
+                    <div class="manual-content" id="manual-content">
+                        <p class="manual-text">Selecione um item para ver as instruções de análise.</p>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Área Central de Inspeção -->
+            <main class="inspection-area">
+                <div class="object-viewer" id="object-viewer">
+                    <div class="viewer-frame">
+                        <div class="corner c-tl"></div>
+                        <div class="corner c-tr"></div>
+                        <div class="corner c-bl"></div>
+                        <div class="corner c-br"></div>
+                    </div>
+                    <img id="object-img" src="" alt="Objeto em análise" draggable="false">
+                    <!-- Lupa overlay -->
+                    <div id="loupe-lens" class="loupe-lens hidden"></div>
+                    <!-- UV overlay -->
+                    <div id="uv-overlay" class="uv-overlay hidden"></div>
+                    <!-- Anomaly markers (aparecem com ferramentas) -->
+                    <div id="anomaly-markers"></div>
+                </div>
+                <p class="object-label" id="object-label">Nome do Objeto</p>
+            </main>
+
+            <!-- Painel de Veredito (Direita) -->
+            <aside class="verdict-panel glass-dark">
+                <h3 class="panel-title">Veredito</h3>
+                <p class="verdict-question">Após sua análise cuidadosa, este objeto é:</p>
+                <div class="verdict-buttons">
+                    <button class="btn-verdict btn-legit" onclick="submitVerdict(false)">
+                        <span class="verdict-icon">✅</span>
+                        Legítimo
+                    </button>
+                    <button class="btn-verdict btn-anomaly" onclick="submitVerdict(true)">
+                        <span class="verdict-icon">⚠️</span>
+                        Anomalia
+                    </button>
+                </div>
+                <div class="tool-result hidden" id="tool-result">
+                    <p id="tool-result-text"></p>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- ===== MODAL: RESULTADO ===== -->
+    <div id="modal-result" class="modal hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-box" id="result-box">
+            <div class="result-icon" id="result-icon">✅</div>
+            <h2 id="result-title">Resultado</h2>
+            <p id="result-detail"></p>
+            <div class="result-rewards" id="result-rewards"></div>
+            <button class="btn-gold" id="btn-result-next" onclick="nextFromResult()">Próximo Item</button>
+        </div>
+    </div>
+
+    <!-- ===== MODAL: LOJA ===== -->
+    <div id="modal-shop" class="modal hidden">
+        <div class="modal-backdrop" onclick="closeShop()"></div>
+        <div class="modal-box shop-box">
+            <h2>🏪 Loja do Curador</h2>
+            <p class="shop-subtitle">Use suas moedas para melhorar seus equipamentos.</p>
+            <div class="shop-grid" id="shop-grid"></div>
+            <button class="btn-close" onclick="closeShop()">Fechar</button>
+        </div>
+    </div>
+
+    <!-- ===== MODAL: MOCHILA ===== -->
+    <div id="modal-backpack" class="modal hidden">
+        <div class="modal-backdrop" onclick="closeBackpack()"></div>
+        <div class="modal-box backpack-box">
+            <h2>🎒 Coleção Pessoal</h2>
+            <p class="shop-subtitle">Objetos que você identificou corretamente.</p>
+            <div class="backpack-grid" id="backpack-grid">
+                <p class="empty-backpack">Sua mochila está vazia. Analise objetos para colecioná-los!</p>
+            </div>
+            <button class="btn-close" onclick="closeBackpack()">Fechar</button>
+        </div>
+    </div>
+
+    <!-- ===== MODAL: FIM DE JOGO ===== -->
+    <div id="modal-gameover" class="modal hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-box gameover-box">
+            <div class="result-icon">🏆</div>
+            <h2>Galeria Concluída!</h2>
+            <p id="final-summary"></p>
+            <div class="final-stats" id="final-stats"></div>
+            <button class="btn-gold" onclick="location.reload()">Jogar Novamente</button>
+        </div>
+    </div>
+
+    <script src="./main.js"></script>
 </body>
 
 </html>
