@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Silent Curator | Antigravity Engine</title>
-    <link rel="stylesheet" href="/style.css">
+    <!-- Substituído para estilo retro de máquina de escrever -->
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Special+Elite&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
@@ -24,8 +26,8 @@
         </div>
 
         <div id="ui-overlay" class="hidden-ui">
-            <aside id="panel-tools" class="glass-panel">
-                <div class="panel-header">Instrumentos</div>
+            <aside id="panel-tools" class="desk-panel">
+                <div class="panel-header">GAVETA DE INSPEÇÃO</div>
                 <div class="tool-buttons">
                     <button id="btn-loupe" class="tool-btn" title="Lupa de Alta Precisão">
                         <span class="icon">🔍</span>
@@ -54,9 +56,9 @@
                 </div>
             </aside>
 
-            <aside id="panel-decision" class="glass-panel">
-                <div class="ui-manual">
-                    <h2>Veredito</h2>
+            <aside id="panel-decision" class="paper-panel">
+                <div class="ui-manual paper-texture">
+                    <h2>VEREDITO OFICIAL</h2>
                     <div id="checklist-container">
                         <label class="check-item">
                             <input type="checkbox" id="check-anacronismo">
@@ -78,9 +80,9 @@
 
         <!-- Manual Modal -->
         <div id="manual-modal" class="hidden screen-overlay">
-            <div class="manual-content">
-                <button id="btn-close-manual" class="close-btn">&times;</button>
-                <img src="/assets/manual.png" alt="Manual de Jogatina" class="manual-image">
+            <div class="manual-content paper-texture">
+                <button id="btn-close-manual" class="close-btn">[X]</button>
+                <img src="./assets/manual.png" alt="Manual de Jogatina" class="manual-image">
             </div>
         </div>
 
@@ -93,10 +95,10 @@
         </div>
 
         <!-- Physical Stamp Overlay -->
-        <div id="stamp-mark" class="stamp-reveal">AUTÊNTICO</div>
+        <div id="stamp-mark" class="stamp-reveal">APROVADO</div>
     </div>
     
-    <script type="module" src="/main.js"></script>
+    <script type="module" src="./main.js"></script>
 </body>
 
 </html>

@@ -6,7 +6,7 @@ const artifactsConfig = [
         id: "vaso",
         name: "O Vaso Grego",
         type: "3d",
-        texture: "/assets/vaso grego.png",
+        texture: "./assets/vaso grego.png",
         anomalies: ["codigo_barras", "assinatura_errada", "guerreiro_cansado"],
         ambientSound: "mar_suave",
         isAnachronistic: true,
@@ -18,7 +18,7 @@ const artifactsConfig = [
         id: "retrato",
         name: "Retrato de uma Nobre",
         type: "2d",
-        texture: "/assets/quadro nobre.jpg",
+        texture: "./assets/quadro nobre.jpg",
         anomalies: ["zipper_invisivel", "reflexo_impossivel", "olhar_seguidor", "sorriso"],
         isAnachronistic: true,
         isMystical: true,
@@ -29,7 +29,7 @@ const artifactsConfig = [
         id: "relogio",
         name: "Relógio de Bolso Vitoriano",
         type: "3d",
-        texture: "/assets/relogio antigo.webp",
+        texture: "./assets/relogio antigo.webp",
         anomalies: ["numero_iiii", "pilha_moderna", "tempo_reverso", "temperatura_fria"],
         isAnachronistic: true,
         isMystical: true,
@@ -81,7 +81,7 @@ function init() {
     scene.add(artifactGroup);
 
     // Bancada (Workbench)
-    const benchTexture = new THREE.TextureLoader().load('/assets/bancada.jpg');
+    const benchTexture = new THREE.TextureLoader().load('./assets/bancada.jpg');
     const benchMaterial = new THREE.MeshStandardMaterial({
         map: benchTexture,
         roughness: 0.9,
