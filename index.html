@@ -4,9 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Silent Curator</title>
-  <script type="module" crossorigin src="/assets/index-qfoC_BW2.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-CjPl0n1q.css">
+    <title>The Silent Curator</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
@@ -27,10 +26,10 @@
                         <span class="icon">🔦</span>
                         <span class="label">Luz UV</span>
                     </button>
-                    <div id="stamp-drag" class="tool-btn stamp" draggable="true">
-                        <span class="icon">🧧</span>
-                        <span class="label">Carimbo</span>
-                    </div>
+                </div>
+                <div class="instructions-panel">
+                    <h3>Instruções</h3>
+                    <p id="artifact-instruction">Carregando instruções...</p>
                 </div>
             </aside>
 
@@ -48,25 +47,14 @@
 
             <aside id="panel-decision" class="glass-panel">
                 <div class="ui-manual">
-                    <h2>Manual de Curadoria</h2>
-                    <div id="checklist-container">
-                        <label class="check-item">
-                            <input type="checkbox" id="check-anacronismo">
-                            <span class="checkmark"></span>
-                            Anacronismo (Ex: Fones, QR Code)
-                        </label>
-                        <label class="check-item">
-                            <input type="checkbox" id="check-mistico">
-                            <span class="checkmark"></span>
-                            Propriedades Místicas (Pisca/Move)
-                        </label>
-                        <label class="check-item">
-                            <input type="checkbox" id="check-falso">
-                            <span class="checkmark"></span>
-                            Falsificação (Assinatura/Material)
-                        </label>
+                    <h2 id="artifact-name">Objeto</h2>
+                    <div id="decision-container">
+                        <p class="decision-text">Após sua análise, este objeto é:</p>
+                        <div class="decision-buttons">
+                            <button id="btn-normal" class="primary-btn decision-btn">Normal</button>
+                            <button id="btn-anomaly" class="primary-btn decision-btn anomaly">Anomalia</button>
+                        </div>
                     </div>
-                    <button id="btn-finalizar" class="primary-btn">Enviar Veredito</button>
                 </div>
             </aside>
         </div>
@@ -78,7 +66,16 @@
                 <button id="btn-next" class="primary-btn">Próximo Artefato</button>
             </div>
         </div>
-    </div>
+
+        <div id="game-over-modal" class="hidden">
+            <div class="modal-content">
+                <h1 id="game-over-title">Fim de Jogo</h1>
+                <p id="game-over-message">Você falhou na curadoria. Um erro grave foi cometido.</p>
+                <button id="btn-restart" class="primary-btn">Tentar Novamente</button>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="./main.js"></script>
 </body>
 
 </html>
