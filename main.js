@@ -1,20 +1,15 @@
-/* ==========================================
-   THE SILENT CURATOR — GAME v2.0
-   Sem dependências externas
-   ========================================== */
-
 var ITEMS = [
     {
         id: "vaso", name: "Vaso Grego Antigo",
         image: "./assets/vaso grego.png",
         isAnomaly: true,
-        house: "Casa de Leilões Christie's — Londres",
+        house: "Casa de Leiloes Christie's - Londres",
         price: "$18.500",
-        origin: "Escavação arqueológica em Atenas, Grécia — 340 a.C.",
-        desc: "Um vaso cerâmico com figuras negras típicas do período clássico grego. Foi encontrado em uma tumba real durante escavações recentes.",
-        manual: "🔍 Use a LUPA para examinar a base.\nVasos autênticos NÃO possuem marcações digitais.\n\n⚖️ Use a BALANÇA para verificar o peso.\nCerâmica antiga é mais leve que réplicas.\n\n📌 PROCURE: Códigos de barras ou etiquetas modernas.",
-        anomalyText: "Código de barras moderno encontrado na base do vaso.",
-        markers: [{ x: 48, y: 85, w: 8, h: 6, tool: "loupe", label: "Código de barras" }],
+        origin: "Escavacao arqueologica em Atenas, Grecia - 340 a.C.",
+        desc: "Um vaso ceramico com figuras negras tipicas do periodo classico grego. Foi encontrado em uma tumba real durante escavacoes recentes.",
+        manual: "Use a LUPA para examinar a base.\nVasos autenticos NAO possuem marcacoes digitais.\n\nUse a BALANCA para verificar o peso.\nCeramica antiga e mais leve que replicas.\n\nPROCURE: Codigos de barras ou etiquetas modernas.",
+        anomalyText: "Codigo de barras moderno encontrado na base do vaso.",
+        markers: [{ x: 48, y: 85, w: 8, h: 6, tool: "loupe", label: "Codigo de barras" }],
         uvReact: false,
         weight: "1.8kg", expected: "0.9kg"
     },
@@ -22,26 +17,26 @@ var ITEMS = [
         id: "retrato", name: "Retrato de Nobre",
         image: "./assets/quadro nobre.jpg",
         isAnomaly: true,
-        house: "Maison de Ventes Drouot — Paris",
+        house: "Maison de Ventes Drouot - Paris",
         price: "$42.000",
-        origin: "Coleção particular, família aristocrata portuguesa — séc. XIX",
-        desc: "Retrato a óleo de um jovem nobre em trajes formais. A pintura apresenta tons escuros e traços neoclássicos europeus.",
-        manual: "🔦 Use a LUZ UV para revelar reações na tinta.\nPinturas com propriedades anômalas emitem brilho.\n\n🔍 Use a LUPA nos olhos do retrato.\nHá relatos de que 'os olhos seguem o observador'.\n\n📌 PROCURE: Brilho anormal sob UV.",
-        anomalyText: "A pintura emite aura mística violeta sob luz UV. Os olhos parecem seguir o observador.",
+        origin: "Colecao particular, familia aristocrata portuguesa - sec. XIX",
+        desc: "Retrato a oleo de um jovem nobre em trajes formais. A pintura apresenta tons escuros e tracos neoclassicos europeus.",
+        manual: "Use a LUZ UV para revelar reacoes na tinta.\nPinturas com propriedades anomalas emitem brilho.\n\nUse a LUPA nos olhos do retrato.\nHa relatos de que os olhos seguem o observador.\n\nPROCURE: Brilho anormal sob UV.",
+        anomalyText: "A pintura emite aura mistica violeta sob luz UV. Os olhos parecem seguir o observador.",
         markers: [{ x: 42, y: 32, w: 6, h: 4, tool: "uv", label: "Olho reage" }, { x: 52, y: 32, w: 6, h: 4, tool: "uv", label: "Olho reage" }],
         uvReact: true,
         weight: "2.1kg", expected: "2.1kg"
     },
     {
-        id: "relogio", name: "Relógio de Bolso Vitoriano",
+        id: "relogio", name: "Relogio de Bolso Vitoriano",
         image: "./assets/relogio antigo.webp",
         isAnomaly: true,
-        house: "Bonhams Auction House — Nova York",
+        house: "Bonhams Auction House - Nova York",
         price: "$8.200",
-        origin: "Espólio de relojoeiro em Manchester, Inglaterra — 1887",
-        desc: "Relógio de bolso em ouro com mecanismo aparente. O tique-taque é preciso após mais de um século.",
-        manual: "🔍 Use a LUPA para inspecionar o mecanismo.\nRelógios vitorianos NÃO tinham eletrônicos.\n\n⚖️ Use a BALANÇA — peso maior que o esperado\npode indicar componentes ocultos.\n\n📌 PROCURE: Microchips ou circuitos.",
-        anomalyText: "Microchip eletrônico encontrado entre as engrenagens mecânicas.",
+        origin: "Espolio de relojoeiro em Manchester, Inglaterra - 1887",
+        desc: "Relogio de bolso em ouro com mecanismo aparente. O tique-taque e preciso apos mais de um seculo.",
+        manual: "Use a LUPA para inspecionar o mecanismo.\nRelogios vitorianos NAO tinham eletronicos.\n\nUse a BALANCA - peso maior que o esperado\npode indicar componentes ocultos.\n\nPROCURE: Microchips ou circuitos.",
+        anomalyText: "Microchip eletronico encontrado entre as engrenagens mecanicas.",
         markers: [{ x: 35, y: 45, w: 5, h: 5, tool: "loupe", label: "Microchip" }],
         uvReact: false,
         weight: "450g", expected: "280g"
@@ -50,12 +45,12 @@ var ITEMS = [
         id: "moeda", name: "Moeda Romana de Ouro",
         image: "./assets/unnamed.jpg",
         isAnomaly: false,
-        house: "Numismática Roma Aurea — Roma",
+        house: "Numismatica Roma Aurea - Roma",
         price: "$5.800",
-        origin: "Sítio arqueológico no Fórum Romano — 27 a.C.",
-        desc: "Moeda de ouro do período de Augusto com a face do imperador. Apresenta desgaste natural compatível com a idade.",
-        manual: "🔍 Verifique o desgaste com a LUPA.\nMoedas autênticas têm erosão uniforme.\n\n⚖️ A BALANÇA deve confirmar peso consistente.\n\n🔦 Sob LUZ UV, ouro autêntico NÃO reage.\n\n📌 Esta peça PODE ser genuína. Cuidado!",
-        anomalyText: "Peça autêntica do período de Augusto. Ouro puro com desgaste natural.",
+        origin: "Sitio arqueologico no Forum Romano - 27 a.C.",
+        desc: "Moeda de ouro do periodo de Augusto com a face do imperador. Apresenta desgaste natural compativel com a idade.",
+        manual: "Verifique o desgaste com a LUPA.\nMoedas autenticas tem erosao uniforme.\n\nA BALANCA deve confirmar peso consistente.\n\nSob LUZ UV, ouro autentico NAO reage.\n\nEsta peca PODE ser genuina. Cuidado!",
+        anomalyText: "Peca autentica do periodo de Augusto. Ouro puro com desgaste natural.",
         markers: [],
         uvReact: false,
         weight: "8.4g", expected: "8.4g"
@@ -63,14 +58,13 @@ var ITEMS = [
 ];
 
 var SHOP = [
-    { id: "l2", name: "Lupa Avançada", desc: "Zoom 2x maior", cost: 150, tool: "loupe", lv: 2, icon: "🔍" },
-    { id: "l3", name: "Lupa Pro", desc: "Zoom 3x + detecção", cost: 400, tool: "loupe", lv: 3, icon: "🔎" },
-    { id: "u2", name: "UV Onda Longa", desc: "Revelação intensa", cost: 150, tool: "uv", lv: 2, icon: "🔦" },
+    { id: "l2", name: "Lupa Avancada", desc: "Zoom 2x maior", cost: 150, tool: "loupe", lv: 2, icon: "🔍" },
+    { id: "l3", name: "Lupa Pro", desc: "Zoom 3x + deteccao", cost: 400, tool: "loupe", lv: 3, icon: "🔎" },
+    { id: "u2", name: "UV Onda Longa", desc: "Revelacao intensa", cost: 150, tool: "uv", lv: 2, icon: "🔦" },
     { id: "u3", name: "UV Espectro Total", desc: "Todo o espectro", cost: 400, tool: "uv", lv: 3, icon: "💡" },
-    { id: "s2", name: "Balança Digital", desc: "Precisão 0.1g", cost: 200, tool: "scale", lv: 2, icon: "⚖️" }
+    { id: "s2", name: "Balanca Digital", desc: "Precisao 0.1g", cost: 200, tool: "scale", lv: 2, icon: "⚖️" }
 ];
 
-// Estado
 var G = {
     lvl: 0,
     score: 0,
@@ -82,7 +76,6 @@ var G = {
     uv: false
 };
 
-// === NAVEGAÇÃO ===
 function show(id) {
     var s = document.querySelectorAll('.screen');
     for (var i = 0; i < s.length; i++) s[i].classList.remove('active');
@@ -140,7 +133,6 @@ function updHUD() {
     document.getElementById('h-level').innerText = (G.lvl + 1) + '/' + ITEMS.length;
 }
 
-// === FERRAMENTAS ===
 function togLoupe() {
     G.loupe = !G.loupe;
     document.getElementById('t-loupe').classList.toggle('active', G.loupe);
@@ -193,10 +185,10 @@ function togUV() {
 function useScale() {
     var d = ITEMS[G.lvl];
     var ok = (d.weight === d.expected);
-    var prec = G.tools.scale >= 2 ? ' (±0.1g)' : ' (±5g)';
+    var prec = G.tools.scale >= 2 ? ' (+-0.1g)' : ' (+-5g)';
     var tr = document.getElementById('tool-res');
     var tt = document.getElementById('tool-res-txt');
-    tt.innerHTML = '⚖️ <b>Peso:</b> ' + d.weight + prec + '<br>📊 <b>Esperado:</b> ' + d.expected + '<br>' + (ok ? '✅ Peso consistente.' : '⚠️ DISCREPÂNCIA DETECTADA!');
+    tt.innerHTML = '<b>Peso:</b> ' + d.weight + prec + '<br><b>Esperado:</b> ' + d.expected + '<br>' + (ok ? 'Peso consistente.' : 'DISCREPANCIA DE PESO DETECTADA!');
     tr.style.display = 'block';
     tr.className = ok ? 'tool-res tres-ok' : 'tool-res tres-warn';
 }
@@ -222,7 +214,6 @@ function showMarkers(tool) {
 
 function clearMarkers() { document.getElementById('markers').innerHTML = ''; }
 
-// === VEREDITO ===
 function verdict(isAnom) {
     var d = ITEMS[G.lvl];
     var ok = (isAnom === d.isAnomaly);
@@ -240,12 +231,12 @@ function verdict(isAnom) {
         icon.innerText = '✅'; box.className = 'mbox';
         title.innerText = 'Veredito Correto!';
         detail.innerText = d.anomalyText;
-        rew.innerHTML = '<div class="rew">+' + pts + ' pontos</div><div class="rew">+' + cns + ' moedas 💰</div><div class="rew">🎒 ' + d.name + ' → mochila</div>';
+        rew.innerHTML = '<div class="rew">+' + pts + ' pontos</div><div class="rew">+' + cns + ' moedas</div><div class="rew">' + d.name + ' adicionado a mochila</div>';
     } else {
         G.score = Math.max(0, G.score - 50);
         icon.innerText = '❌'; box.className = 'mbox fail';
         title.innerText = 'Erro de Curadoria';
-        detail.innerText = d.isAnomaly ? 'Era uma anomalia: ' + d.anomalyText : 'O item era legítimo. ' + d.name + ' era autêntico!';
+        detail.innerText = d.isAnomaly ? 'Era uma anomalia: ' + d.anomalyText : 'O item era legitimo. ' + d.name + ' era autentico!';
         rew.innerHTML = '<div class="rew bad">-50 pontos</div>';
     }
     updHUD();
@@ -256,15 +247,14 @@ function nextItem() {
     document.getElementById('m-result').classList.remove('open');
     G.lvl++;
     if (G.lvl >= ITEMS.length) {
-        document.getElementById('end-sum').innerText = 'Você inspecionou ' + ITEMS.length + ' artefatos com ' + G.score + ' pontos.';
-        document.getElementById('end-stats').innerHTML = '<div class="frow"><span>Pontuação</span><span>' + G.score + '</span></div><div class="frow"><span>Moedas</span><span>💰 ' + G.coins + '</span></div><div class="frow"><span>Coleção</span><span>🎒 ' + G.bag.length + '</span></div>';
+        document.getElementById('end-sum').innerText = 'Voce inspecionou ' + ITEMS.length + ' artefatos com ' + G.score + ' pontos.';
+        document.getElementById('end-stats').innerHTML = '<div class="frow"><span>Pontuacao</span><span>' + G.score + '</span></div><div class="frow"><span>Moedas</span><span>' + G.coins + '</span></div><div class="frow"><span>Colecao</span><span>' + G.bag.length + '</span></div>';
         document.getElementById('m-end').classList.add('open');
     } else {
         showAuction(G.lvl);
     }
 }
 
-// === LOJA ===
 function openShop() {
     var g = document.getElementById('shop-grid'); g.innerHTML = '';
     for (var i = 0; i < SHOP.length; i++) {
@@ -274,7 +264,7 @@ function openShop() {
         var avail = s.lv === (G.tools[s.tool] || 0) + 1;
         var c = document.createElement('div');
         c.className = 'scard' + (own ? ' own' : '') + ((!afford && !own) ? ' exp' : '') + ((!own && afford && avail) ? ' can' : '');
-        c.innerHTML = '<div class="si">' + s.icon + '</div><h4>' + s.name + '</h4><p>' + s.desc + '</p><div class="sp">' + (own ? '✅ Comprado' : (avail ? '💰 ' + s.cost : '🔒 Nv.' + (s.lv - 1) + ' primeiro')) + '</div>';
+        c.innerHTML = '<div class="si">' + s.icon + '</div><h4>' + s.name + '</h4><p>' + s.desc + '</p><div class="sp">' + (own ? 'Comprado' : (avail ? '' + s.cost + ' moedas' : 'Compre Nv.' + (s.lv - 1) + ' primeiro')) + '</div>';
         if (!own && afford && avail) {
             c.setAttribute('data-i', i);
             c.addEventListener('click', (function (idx) { return function () { buy(idx); }; })(i));
@@ -292,16 +282,14 @@ function buy(i) {
 }
 function closeShop() { document.getElementById('m-shop').classList.remove('open'); }
 
-// === MOCHILA ===
 function openBP() {
     var g = document.getElementById('bp-grid');
-    if (G.bag.length === 0) { g.innerHTML = '<p class="empty-bp">Sua mochila está vazia.</p>'; }
+    if (G.bag.length === 0) { g.innerHTML = '<p class="empty-bp">Sua mochila esta vazia.</p>'; }
     else { g.innerHTML = ''; for (var i = 0; i < G.bag.length; i++) { var b = G.bag[i]; var c = document.createElement('div'); c.className = 'bcard'; c.innerHTML = '<img src="' + b.image + '" alt=""><h4>' + b.name + '</h4><p>' + b.origin + '</p>'; g.appendChild(c); } }
     document.getElementById('m-bp').classList.add('open');
 }
 function closeBP() { document.getElementById('m-bp').classList.remove('open'); }
 
-// === PARTÍCULAS ===
 (function () {
     var c = document.getElementById('particles');
     if (!c) return;

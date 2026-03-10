@@ -36,7 +36,6 @@
             height: 100vh;
         }
 
-        /* === SCREENS === */
         .screen {
             position: fixed;
             inset: 0;
@@ -48,7 +47,6 @@
             display: flex;
         }
 
-        /* === START SCREEN (IGUAL PRIMEIRA VERSÃO) === */
         #screen-start {
             background: radial-gradient(ellipse at center, #151520 0%, #050508 80%);
             align-items: center;
@@ -126,7 +124,6 @@
             border: 1px solid rgba(196, 160, 96, 0.2);
         }
 
-        /* Particles */
         .particles {
             position: absolute;
             inset: 0;
@@ -159,7 +156,6 @@
             }
         }
 
-        /* === BUTTONS === */
         .btn-gold {
             background: var(--gold);
             border: none;
@@ -202,7 +198,6 @@
             color: var(--txt);
         }
 
-        /* === AUCTION === */
         #screen-auction {
             background: radial-gradient(ellipse at top, #1a1520, #080810);
             align-items: center;
@@ -307,7 +302,6 @@
             margin-bottom: 2rem;
         }
 
-        /* === HUD === */
         .hud {
             position: absolute;
             top: 0;
@@ -369,7 +363,6 @@
             transform: scale(1.1);
         }
 
-        /* === INSPECTION LAYOUT === */
         #screen-inspection {
             background: var(--bg);
             flex-direction: column;
@@ -408,7 +401,6 @@
             margin-bottom: 1.2rem;
         }
 
-        /* Tools */
         .tools-list {
             display: flex;
             flex-direction: column;
@@ -457,7 +449,6 @@
             border-radius: 10px;
         }
 
-        /* Manual */
         .manual-sec {
             margin-top: auto;
             border-top: 1px solid var(--border);
@@ -473,7 +464,6 @@
             word-wrap: break-word;
         }
 
-        /* Object viewer */
         .insp-center {
             display: flex;
             flex-direction: column;
@@ -512,7 +502,6 @@
             filter: hue-rotate(240deg) saturate(2) brightness(0.6);
         }
 
-        /* Corners */
         .vf {
             position: absolute;
             inset: 15px;
@@ -565,7 +554,6 @@
             text-transform: uppercase;
         }
 
-        /* Loupe */
         .loupe {
             position: absolute;
             z-index: 20;
@@ -577,7 +565,6 @@
             display: none;
         }
 
-        /* UV overlay */
         .uv-ov {
             position: absolute;
             inset: 0;
@@ -600,7 +587,6 @@
             }
         }
 
-        /* Anomaly markers */
         .markers {
             position: absolute;
             inset: 0;
@@ -642,7 +628,6 @@
             font-weight: 600;
         }
 
-        /* Verdict */
         .verd-q {
             font-family: 'Crimson Pro', serif;
             font-size: 1rem;
@@ -720,7 +705,6 @@
             display: block;
         }
 
-        /* === MODALS === */
         .modal {
             position: fixed;
             inset: 0;
@@ -798,7 +782,6 @@
             color: var(--red);
         }
 
-        /* Shop */
         .mbox.wide {
             max-width: 750px;
         }
@@ -866,7 +849,6 @@
             font-weight: 600;
         }
 
-        /* Backpack */
         .bgrid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -908,7 +890,6 @@
             font-style: italic;
         }
 
-        /* Game Over */
         .fstats {
             text-align: left;
             margin-bottom: 1.5rem;
@@ -931,7 +912,6 @@
 
 <body>
 
-    <!-- TELA INICIAL -->
     <div id="screen-start" class="screen active">
         <div class="particles" id="particles"></div>
         <div class="start-wrap">
@@ -950,7 +930,6 @@
         </div>
     </div>
 
-    <!-- LEILÃO -->
     <div id="screen-auction" class="screen">
         <div class="auction-wrap">
             <div class="auction-head">
@@ -971,7 +950,6 @@
         </div>
     </div>
 
-    <!-- INSPEÇÃO -->
     <div id="screen-inspection" class="screen">
         <div class="hud">
             <div class="hud-item"><span class="hud-lbl">Pontuação</span><span class="hud-val" id="h-score">0</span>
@@ -1031,7 +1009,6 @@
         </div>
     </div>
 
-    <!-- MODAL: RESULTADO -->
     <div id="m-result" class="modal">
         <div class="modal-bg"></div>
         <div class="mbox" id="res-box">
@@ -1043,7 +1020,6 @@
         </div>
     </div>
 
-    <!-- MODAL: LOJA -->
     <div id="m-shop" class="modal">
         <div class="modal-bg" onclick="closeShop()"></div>
         <div class="mbox wide">
@@ -1054,7 +1030,6 @@
         </div>
     </div>
 
-    <!-- MODAL: MOCHILA -->
     <div id="m-bp" class="modal">
         <div class="modal-bg" onclick="closeBP()"></div>
         <div class="mbox wide">
@@ -1067,7 +1042,6 @@
         </div>
     </div>
 
-    <!-- MODAL: FIM -->
     <div id="m-end" class="modal">
         <div class="modal-bg"></div>
         <div class="mbox">
